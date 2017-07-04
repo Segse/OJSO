@@ -2,17 +2,16 @@
  * OJSO JavaScript Library v0.1
  *
  * Released under the MIT license
- * https://jquery.org/license
  *
  * Date: 2017.06.26 - 18:50
  */
 "use strict";
 /* namespace */
-// var OJSO = OJSO || new function () {
-var OJSO = new function () {
+var OJSO = OJSO || new function () {
+    /* keyword this in this class context */
     var _this = this;
     /**
-     * @type {OJSO}
+     * @type {_thisNamespace}
      * @private
      */
     var _thisNamespace = _this;
@@ -31,7 +30,7 @@ var OJSO = new function () {
         return (new Date()).getTime();
     };
     /**
-     * @param id
+     * @param {string} id
      */
     _this.BenchmarkClass = function (id) {
         var _this = this;
@@ -46,7 +45,7 @@ var OJSO = new function () {
             }
         };
         /**
-         * @param id
+         * @param {string} id
          */
         _this.begin = function (id) {
             benchmarkCaseHash[id] = {
@@ -54,8 +53,8 @@ var OJSO = new function () {
             }
         };
         /**
-         * @param id
-         * @param dump
+         * @param {string} id
+         * @param {boolean|undefined} dump
          */
         _this.end = function (id, dump) {
             var dumpBool;
@@ -70,13 +69,13 @@ var OJSO = new function () {
             }
         };
         /**
-         * @param id
+         * @param {string} id
          */
         _this.dump = function (id) {
             console.log('benchmark run-time analysis: ' + id + ' = ' + benchmarkCaseHash[id].time + 'ms');
         };
         /**
-         * @param ifTimeGreaterThan
+         * @param {number} ifTimeGreaterThan
          */
         _this.dumpAll = function (ifTimeGreaterThan) {
             var ifTimeGreaterThanInt = ifTimeGreaterThan;
@@ -104,20 +103,20 @@ var OJSO = new function () {
         /* keyword this in this class context */
         var _this = this;
         /**
-         * @param param1
+         * @param {*} param1
          */
         _this.traitFunction1 = function (param1) {
             // console.log('trait function 1 = ' + param1);
         };
         /**
-         * @param param1
+         * @param {*} param1
          */
         _this.traitFunction2 = function (param1) {
             // console.log('trait function 2 = ' + param1);
         };
     };
     /**
-     * @param param1
+     * @param {*} param1
      * @constructor
      */
     _this.DummyParentClass = function (param1) {
@@ -132,10 +131,10 @@ var OJSO = new function () {
          */
         _this.publicParent = 'I am public parent';
         /**
-         * @param param1
+         * @param {*} param1
          * @returns {*}
          */
-        _this.publicFunction = function (param1) {
+        _this.publicMethod = function (param1) {
             // console.log(_this.publicParent);
             return param1;
         };
@@ -153,7 +152,7 @@ var OJSO = new function () {
      */
     DummyObj = null;
     /**
-     * @param param1
+     * @param {*} param1
      * @returns {DummyClass}
      * @constructor
      */
@@ -174,7 +173,7 @@ var OJSO = new function () {
          */
         var privateProperty = 0;
         /**
-         * @param param1
+         * @param {*} param1
          * @returns {*}
          */
         var privateMethod = function (param1) {
@@ -186,7 +185,7 @@ var OJSO = new function () {
          */
         _this.publicProperty = 1;
         /**
-         * @param param1
+         * @param {*} param1
          * @returns {*}
          */
         _this.publicMethod = function (param1) {
@@ -207,7 +206,111 @@ var OJSO = new function () {
         })(param1);
     };
     /**
-     * @param val
+     * @param {*} val
+     * @returns {boolean}
+     */
+    _this.isUndefined = function (val) {
+        return undefined === val;
+    };
+    /**
+     * @param {*} val
+     * @returns {boolean}
+     */
+    _this.isNull = function (val) {
+        return null === val;
+    };
+    /**
+     * @param {*} val
+     * @returns {boolean}
+     */
+    _this.isNaN = function (val) {
+        return !_this.isNumber(val);
+    };
+    /**
+     * @param {*} val
+     * @returns {boolean}
+     */
+    _this.isBoolean = function (val) {
+        return 'boolean' === typeof val;
+    };
+    /**
+     * @param {*} val
+     * @returns {boolean}
+     */
+    _this.isNumeric = function (val) {
+        return Number(val) == val;
+    };
+    /**
+     * @param {*} val
+     * @returns {boolean}
+     */
+    _this.isNumber = function (val) {
+        return Number(val) === val;
+    };
+    /**
+     * @param {*} val
+     * @returns {boolean}
+     */
+    _this.isInteger = function (val) {
+        return _this.isNumber(val) && 0 === val % 1 && !_this.isNaN(val % 1);
+    };
+    /**
+     * @param {*} val
+     * @returns {boolean}
+     */
+    _this.isFloat = function (val) {
+        var re;
+        if (_this.isInteger(val)) {
+            re = true;
+        } else {
+            re = _this.isNumber(val) && 0 !== val % 1 && !_this.isNaN(val % 1);
+        }
+        return re;
+    };
+    /**
+     * @param {*} val
+     * @returns {boolean}
+     */
+    _this.isFinite = function (val) {
+        return _this.isNumber(val) && isFinite(val);
+    };
+    /**
+     * @param {*} val
+     * @returns {boolean}
+     */
+    _this.isInfinite = function (val) {
+        return _this.isNumber(val) && !isFinite(val);
+    };
+    /**
+     * @param {*} val
+     * @returns {boolean}
+     */
+    _this.isString = function (val) {
+        return 'string' === typeof val;
+    };
+    /**
+     * @param {*} val
+     * @returns {boolean}
+     */
+    _this.isFunction = function (val) {
+        return 'function' === typeof val;
+    };
+    /**
+     * @param {*} val
+     * @returns {boolean}
+     */
+    _this.isArray = function (val) {
+        return Array.isArray(val);
+    };
+    /**
+     * @param {*} val
+     * @returns {boolean}
+     */
+    _this.isObject = function (val) {
+        return 'object' === typeof val && !_this.isArray(val) && !_this.isNull(val);
+    };
+    /**
+     * @param {*} val
      * @returns {boolean}
      */
     _this.isSet = function (val) {
@@ -219,12 +322,12 @@ var OJSO = new function () {
         } else if (isNaN(val)) {
             re = false;
         } else {
-            throw 'unable to resolve: isSet(' + val + '); typeof ' + val + ' === unknown'
+            throw 'unable to solve: isSet(' + val + '); typeof ' + val + ' === unknown'
         }
         return re;
     };
     /**
-     * @param val
+     * @param {*} val
      * @returns {boolean}
      */
     _this.isEmpty = function (val) {
@@ -243,116 +346,12 @@ var OJSO = new function () {
         } else if (isNaN(val)) {
             re = true;
         } else {
-            throw 'unable to resolve: isEmpty(' + val + '); typeof ' + val + ' === unknown'
+            throw 'unable to solve: isEmpty(' + val + '); typeof ' + val + ' === unknown'
         }
         return re;
     };
     /**
-     * @param val
-     * @returns {boolean}
-     */
-    _this.isNull = function (val) {
-        return null === val;
-    };
-    /**
-     * @param val
-     * @returns {boolean}
-     */
-    _this.isUndefined = function (val) {
-        return undefined === val;
-    };
-    /**
-     * @param val
-     * @returns {boolean}
-     */
-    _this.isNaN = function (val) {
-        return !_this.isNumber(val);
-    };
-    /**
-     * @param val
-     * @returns {boolean}
-     */
-    _this.isBoolean = function (val) {
-        return 'boolean' === typeof val;
-    };
-    /**
-     * @param val
-     * @returns {boolean}
-     */
-    _this.isNumber = function (val) {
-        return Number(val) === val;
-    };
-    /**
-     * @param val
-     * @returns {boolean}
-     */
-    _this.isNumeric = function (val) {
-        return Number(val) == val;
-    };
-    /**
-     * @param val
-     * @returns {boolean}
-     */
-    _this.isInteger = function (val) {
-        return _this.isNumber(val) && 0 === val % 1 && !_this.isNaN(val % 1);
-    };
-    /**
-     * @param val
-     * @returns {boolean}
-     */
-    _this.isFloat = function (val) {
-        var re;
-        if (_this.isInteger(val)) {
-            re = true;
-        } else {
-            re = _this.isNumber(val) && 0 !== val % 1 && !_this.isNaN(val % 1);
-        }
-        return re;
-    };
-    /**
-     * @param val
-     * @returns {boolean}
-     */
-    _this.isFinite = function (val) {
-        return _this.isNumber(val) && isFinite(val);
-    };
-    /**
-     * @param val
-     * @returns {boolean}
-     */
-    _this.isInfinite = function (val) {
-        return _this.isNumber(val) && !isFinite(val);
-    };
-    /**
-     * @param val
-     * @returns {boolean}
-     */
-    _this.isString = function (val) {
-        return 'string' === typeof val;
-    };
-    /**
-     * @param val
-     * @returns {boolean}
-     */
-    _this.isFunction = function (val) {
-        return 'function' === typeof val;
-    };
-    /**
-     * @param val
-     * @returns {boolean}
-     */
-    _this.isArray = function (val) {
-        return Array.isArray(val);
-    };
-    /**
-     * @param val
-     * @returns {boolean}
-     */
-    _this.isObject = function (val) {
-        return 'object' === typeof val && !_this.isArray(val) && !_this.isNull(val);
-    };
-    /**
-     * @param val
+     * @param {*} val
      * @returns {boolean}
      */
     _this.toBoolean = function (val) {
@@ -391,7 +390,12 @@ var OJSO = new function () {
         return re;
     };
     /**
-     * @param val
+     * @todo toNumber
+     */
+    _this.toNumber = function () {
+    };
+    /**
+     * @param {*} val
      * @returns {number}
      */
     _this.toInteger = function (val) {
@@ -419,7 +423,7 @@ var OJSO = new function () {
         return re;
     };
     /**
-     * @param val
+     * @param {*} val
      * @returns {number}
      */
     _this.toFloat = function (val) {
@@ -428,7 +432,11 @@ var OJSO = new function () {
         if (_this.isFloat(val)) {
             re = val;
         } else if (_this.isBoolean(val)) {
-            re = val ? 1.0 : 0.0;
+            if (val) {
+                re = 1.0;
+            } else {
+                re = 0.0;
+            }
         } else if (_this.isNull(val) || _this.isUndefined(val) || _this.isInfinite(val) || _this.isFunction(val) || _this.isArray(val) || _this.isObject(val)) {
             re = _this.toFloat(_this.toBoolean(val));
         } else if (_this.isString(val)) {
@@ -447,8 +455,7 @@ var OJSO = new function () {
         return re;
     };
     /**
-     *
-     * @param val
+     * @param {*} val
      * @returns {string}
      */
     _this.toString = function (val) {
@@ -460,22 +467,45 @@ var OJSO = new function () {
         }
         return re;
     };
-    // toFunc
-    // toArr
-    // toObj
     /**
-     *
+     * @todo toFunction
+     * @todo validate usefulness
+     */
+    _this.toFunction = function () {
+    };
+    /**
+     * @todo toArray
+     */
+    _this.toArray = function () {
+    };
+    /**
+     * @todo toHash
+     */
+    _this.toHash = function () {
+    };
+    /**
+     * @todo toObject
+     */
+    _this.toObject = function () {
+    };
+    /**
      * @todo new tests
      * @todo micro time benchmark for lib
      * @constructor
      */
     _this.TestClass = function () {
+        /* keyword this in this class context */
+        var _this = this;
         /**
          * @type {string}
          */
         var separatorStrTest = '#########################';
         var separatorStrCase = '-------------------------';
         /**
+         * @todo preg_match preg_replace, regExp
+         * @todo replace str replace regex
+         * @todo floor ceil
+         * @todo tofixed for round
          * @todo funciton with body empty
          * @todo funciton with body
          * @todo case -0.1 +0.1
@@ -5080,16 +5110,16 @@ var OJSO = new function () {
             console.log(separatorStrCase + separatorStrCase);
         };
         /**
-         * @param func
-         * @param val
-         * @param expected
-         * @param i
+         * @param {string} func
+         * @param {*} val
+         * @param {*} expected
+         * @param {string} i
          */
         var testCase = function (func, val, expected, i) {
             var benchmarkId = func + '(' + val + ')';
-            _this.BenchmarkObj.begin(benchmarkId);
+            _thisNamespace.BenchmarkObj.begin(benchmarkId);
             var re = _thisNamespace[func](val);
-            _this.BenchmarkObj.end(benchmarkId, false);
+            _thisNamespace.BenchmarkObj.end(benchmarkId, false);
             if (expected !== re) {
                 caseSeparator();
                 console.log('case:');
@@ -5101,12 +5131,12 @@ var OJSO = new function () {
                 console.log('expected:');
                 console.log(expected);
                 console.log('benchmark:');
-                _this.BenchmarkObj.dump(benchmarkId);
+                _thisNamespace.BenchmarkObj.dump(benchmarkId);
             }
         };
         /**
          * @todo console.log swap to log debug function
-         * @param test
+         * @param {string} test
          */
         var runTest = function (test) {
             var i;
@@ -5126,64 +5156,101 @@ var OJSO = new function () {
                 runTest(test);
             }
             testSeparator();
-            _this.BenchmarkObj.dumpAll(0);
+            _thisNamespace.BenchmarkObj.dumpAll(0);
         };
         /* constructor */
         (function () {
             startTestAll();
         })();
     };
-    // /**
-    //  * singleton
-    //  *
-    //  * @type {_thisNamespace.DOMHandlerClass}
-    //  */
-    // var DOMHandlerObj;
-    // /**
-    //  *
-    //  * @returns {_thisNamespace.DOMHandlerClass}
-    //  * @constructor
-    //  */
-    // _this.DOMHandlerClass = function () {
-    //     /* singleton */
-    //     if (DOMHandlerObj instanceof _thisNamespace.DOMHandlerClass) {
-    //         return DOMHandlerObj;
-    //     }
-    //     /* keyword this in this class context */
-    //     var _this = this;
-    //     _this.document = document;
-    //     _this.$doc = {};
-    //     _this.CLICK_EVENT = 'click';
-    //     // _this.EVENT = new _thisNamespace.EventClass();
-    //     // _this.Event = {
-    //     //     click: 'click',
-    //     //     change: 'change',
-    //     //     keyUp: 'keyup'
-    //     // };
-    //     /**
-    //      *
-    //      * @param selector
-    //      * @returns {*|jQuery|HTMLElement}
-    //      */
-    //     _this.selectDOMElement = function (selector) {
-    //         return jQuery(selector);
-    //     };
-    //     /**
-    //      *
-    //      * @param selector
-    //      * @returns {*|jQuery|HTMLElement}
-    //      */
-    //     _this.select = function (selector) {
-    //         return _this.selectDOMElement(selector);
-    //     };
-    //     (function () {
-    //         _this.$doc = _this.select(_this.document);
-    //         DOMHandlerObj = _this;
-    //     })()
-    // };
+    /**
+     * @type {_thisNamespace.EventClass}
+     */
+    var EventObj;
+    /**
+     * @returns {_thisNamespace.EventClass}
+     * @constructor
+     */
+    _this.EventClass = function () {
+        /* singleton */
+        if (EventObj instanceof _thisNamespace.EventClass) {
+            return EventObj;
+        }
+        /* keyword this in this class context */
+        var _this = this;
+        /**
+         * @type {string}
+         */
+        _this.click = 'click';
+        /**
+         * @type {string}
+         */
+        _this.change = 'change';
+        /**
+         * @type {string}
+         */
+        _this.keyUp = 'keyup';
+        /**
+         * @type {string}
+         */
+        _this.on = 'on';
+        /**
+         * @param {string} event
+         * @returns {string}
+         */
+        _this.onEvent = function (event) {
+            return _this.on + event;
+        };
+        /* constructor */
+        (function () {
+            EventObj = _this;
+        })();
+    };
+    /**
+     * singleton
+     * @type {_thisNamespace.DOMHandlerClass}
+     */
+    var DOMHandlerObj;
+    /**
+     * @returns {_thisNamespace.DOMHandlerClass}
+     * @constructor
+     */
+    _this.DOMHandlerClass = function () {
+        /* singleton */
+        if (DOMHandlerObj instanceof _thisNamespace.DOMHandlerClass) {
+            return DOMHandlerObj;
+        }
+        /* keyword this in this class context */
+        var _this = this;
+        /* extends simple inheritance */
+        _thisNamespace.EventClass.call(_this);
+        /**
+         * @type {HTMLDocument}
+         */
+        _this.document = document;
+        /**
+         * @type {jQuery|HTMLElement}
+         */
+        _this.$doc = {};
+        /**
+         * @param {string} selector
+         * @returns {*|jQuery|HTMLElement}
+         */
+        _this.selectDOMElement = function (selector) {
+            return jQuery(selector);
+        };
+        /* constructor */
+        (function () {
+            _this.$doc = _this.selectDOMElement(_this.document);
+            DOMHandlerObj = _this;
+        })()
+    };
     _this.BenchmarkObj.end(benchmarkId);
 };
-(new OJSO.TestClass());
+// console.log(OJSO);
+// var DOMHandlerObj = new OJSO.DOMHandlerClass();
+// console.log(DOMHandlerObj);
+// (new OJSO.TestClass());
 // var c = 1000000;
 // var benchmarkId = '{}toInt' + c;
 // var Benchmark = new OJSO.BenchmarkClass(benchmarkId);
@@ -5227,30 +5294,6 @@ var OJSO = new function () {
 // console.log(OJSO);
 // console.log((new Date()).getTime() - OJSO.startTime);
 // try catch final?
-// /**
-//  *
-//  * @returns {OJSO.EventClass}
-//  * @constructor
-//  */
-// OJSO.EventClass = function () {
-//     var _this = this;
-//     _this.on = 'on';
-//     /**
-//      *
-//      * @param event
-//      * @returns {string}
-//      */
-//     var onEvent = function (event) {
-//         return _this.on + event;
-//     };
-//     _this.click = 'click';
-//     _this.change = 'change';
-//     _this.keyUp = 'keyup';
-//     if (OJSO.EventObj instanceof OJSO.EventClass) {
-//         return OJSO.EventObj;
-//     }
-// };
-// OJSO.EventObj = new OJSO.EventClass();
 // /**
 //  * class SimulationObject handles simulated objects
 //  *
