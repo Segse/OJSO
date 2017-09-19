@@ -1,44 +1,152 @@
-/*
- * OJSO JavaScript Library v0.1
+var jQuery = jQuery;
+/**
+ * OJSO JavaScript Library v0.2alpha
  *
  * Released under the MIT license
  *
  * Date: 2017.06.26 - 18:50
+ *
+ * namespace
+ *
+ * @todo log dump handler
+ * @todo merge ojso mit new ojso
+ * @todo dump console.x
+ * @todo css class id identifier
+ * @todo events
+ * @todo get every component
+ * @todo css identifier getCreate css class
+ * @todo location
+ * @todo no shortcut vars params methods
  */
-"use strict";
-/* namespace */
-var OJSO = OJSO || new function () {
+var OJSO = function () {
+    'use strict';
     /* keyword this in this class context */
     var _this = this;
     /**
-     * @type {_thisNamespace}
+     * @type {OJSO}
      * @private
      */
     var _thisNamespace = _this;
     /**
-     * @type {string}
+     * @constructor
      */
-    var benchmarkId = 'OJSOInitialTime';
+    _this.DummyTrait = function DummyTrait() {
+        /* keyword this in this class context */
+        var _this = this;
+        /**
+         * @param {*} param1
+         */
+        var traitFunction1 = function traitFunction1(param1) {
+        };
+        /**
+         * @param {*} param1
+         */
+        _this.traitFunction2 = function traitFunction2(param1) {
+        };
+    };
     /**
-     * @type {DummyClass}
+     * @param {*} param1
+     * @constructor
      */
-    var DummyObj;
+    _this.DummyParent = function DummyParent(param1) {
+        /* keyword this in this class context */
+        var _this = this;
+        /**
+         * @type {string}
+         */
+        var privateParent = 'I am private parent';
+        /**
+         * @type {string}
+         */
+        _this.publicParent = 'I am public parent';
+        /**
+         * @param {*} param1
+         * @returns {*}
+         */
+        var privateMethod = function (param1) {
+            return param1;
+        };
+        /**
+         * @param {*} param1
+         * @returns {*}
+         */
+        _this.publicMethod = function (param1) {
+            return param1;
+        };
+        /* constructor */
+        (function (param1) {
+            _this.publicParent += param1;
+        })(param1);
+    };
+    /**
+     * singleton
+     * @type {Dummy}
+     */
+    var DummyObj = null;
+    /**
+     * @param {*} param1
+     * @returns {Dummy}
+     * @constructor
+     */
+    _this.Dummy = function Dummy(param1) {
+        /* singleton */
+        if (DummyObj instanceof _thisNamespace.Dummy) {
+            return DummyObj;
+        }
+        /* keyword this in this class context */
+        var _this = this;
+        /* extends simple inheritance */
+        _thisNamespace.DummyParent.call(_this, param1);
+        /* trait use */
+        _thisNamespace.DummyTrait.call(_this);
+        /**
+         * @type {number}
+         */
+        var privateProperty = 0;
+        /**
+         * @param {number} param1
+         * @returns {*}
+         */
+        var privateMethod = function privateMethod(param1) {
+            return privateProperty += param1;
+        };
+        /**
+         * @type {number}
+         */
+        _this.publicProperty = 1;
+        /**
+         * @param {number} param1
+         * @returns {*}
+         */
+        _this.publicMethod = function publicMethod(param1) {
+            return _this.publicProperty += param1;
+        };
+        /* constructor */
+        (function (param1) {
+            _this.publicParent += param1 + ' in child';
+            /* singleton */
+            DummyObj = _this;
+        })(param1);
+    };
     /**
      * @returns {number}
      */
-    _this.getMicroTime = function () {
+    _this.getMicroTime = function getMicroTime() {
         return (new Date()).getTime();
     };
     /**
      * @param {string} id
      */
-    _this.BenchmarkClass = function (id) {
+    _this.Benchmark = function Benchmark(id) {
+        /* keyword this in this class context */
         var _this = this;
         /**
+         * be an object for direct access over benchmark id without collecting empty indices [,,2,,4]
+         *
          * @type {{0: {begin: number, end: number, time: number}}}
          */
         var benchmarkCaseHash = {
-            0: {
+            dummyId: {
                 begin: 0,
                 end: 0,
                 time: 0
@@ -47,21 +155,22 @@ var OJSO = OJSO || new function () {
         /**
          * @param {string} id
          */
-        _this.begin = function (id) {
+        _this.begin = function begin(id) {
             benchmarkCaseHash[id] = {
                 begin: _thisNamespace.getMicroTime()
-            }
+            };
         };
         /**
          * @param {string} id
          * @param {boolean|undefined} dump
          */
-        _this.end = function (id, dump) {
-            var dumpBool;
+        _this.end = function end(id, dump) {
             benchmarkCaseHash[id].end = _thisNamespace.getMicroTime();
-            dumpBool = dump;
-            if (_thisNamespace.isUndefined(dumpBool)) {
+            var dumpBool;
+            if (_thisNamespace.isUndefined(dump)) {
                 dumpBool = true;
+            } else {
+                dumpBool = dump;
             }
             benchmarkCaseHash[id].time = benchmarkCaseHash[id].end - benchmarkCaseHash[id].begin;
             if (dumpBool) {
@@ -71,13 +180,13 @@ var OJSO = OJSO || new function () {
         /**
          * @param {string} id
          */
-        _this.dump = function (id) {
+        _this.dump = function dump(id) {
             console.log('benchmark run-time analysis: ' + id + ' = ' + benchmarkCaseHash[id].time + 'ms');
         };
         /**
          * @param {number} ifTimeGreaterThan
          */
-        _this.dumpAll = function (ifTimeGreaterThan) {
+        _this.dumpAll = function dumpAll(ifTimeGreaterThan) {
             var ifTimeGreaterThanInt = ifTimeGreaterThan;
             var id;
             if (_thisNamespace.isUndefined(ifTimeGreaterThanInt)) {
@@ -95,170 +204,60 @@ var OJSO = OJSO || new function () {
             _this.begin(id);
         })(id);
     };
-    _this.BenchmarkObj = new _this.BenchmarkClass(benchmarkId);
-    /**
-     * @constructor
-     */
-    _this.DummyTrait = function () {
-        /* keyword this in this class context */
-        var _this = this;
-        /**
-         * @param {*} param1
-         */
-        _this.traitFunction1 = function (param1) {
-            // console.log('trait function 1 = ' + param1);
-        };
-        /**
-         * @param {*} param1
-         */
-        _this.traitFunction2 = function (param1) {
-            // console.log('trait function 2 = ' + param1);
-        };
-    };
-    /**
-     * @param {*} param1
-     * @constructor
-     */
-    _this.DummyParentClass = function (param1) {
-        /* keyword this in this class context */
-        var _this = this;
-        /**
-         * @type {string}
-         */
-        var privateParent = 'I am private parent';
-        /**
-         * @type {string}
-         */
-        _this.publicParent = 'I am public parent';
-        /**
-         * @param {*} param1
-         * @returns {*}
-         */
-        _this.publicMethod = function (param1) {
-            // console.log(_this.publicParent);
-            return param1;
-        };
-        /* constructor */
-        (function (param1) {
-            privateParent += param1;
-            // console.log(param1 + ' parent');
-            // console.log(_this.publicParent);
-            // console.log(privateParent);
-        })(param1);
-    };
-    /**
-     * singleton
-     * @type {DummyClass}
-     */
-    DummyObj = null;
-    /**
-     * @param {*} param1
-     * @returns {DummyClass}
-     * @constructor
-     */
-    _this.DummyClass = function (param1) {
-        /* singleton */
-        if (DummyObj instanceof _thisNamespace.DummyClass) {
-            // console.log('singleton');
-            return DummyObj;
-        }
-        /* keyword this in this class context */
-        var _this = this;
-        /* extends simple inheritance */
-        _thisNamespace.DummyParentClass.call(_this, param1);
-        /* trait use */
-        _thisNamespace.DummyTrait.call(_this);
-        /**
-         * @type {number}
-         */
-        var privateProperty = 0;
-        /**
-         * @param {*} param1
-         * @returns {*}
-         */
-        var privateMethod = function (param1) {
-            privateProperty += 1;
-            return param1;
-        };
-        /**
-         * @type {number}
-         */
-        _this.publicProperty = 1;
-        /**
-         * @param {*} param1
-         * @returns {*}
-         */
-        _this.publicMethod = function (param1) {
-            // console.log(param1);
-            // console.log(privateMethod(param1));
-            return param1;
-        };
-        /* constructor */
-        (function (param1) {
-            // console.log(param1 + ' child');
-            // console.log(privateParent);
-            _this.publicParent += param1 + ' in child';
-            privateMethod(param1);
-            // console.log(_this.publicParent);
-            // console.log(privateProperty);
-            // console.log(_this.publicProperty);
-            DummyObj = _this;
-        })(param1);
-    };
     /**
      * @param {*} val
      * @returns {boolean}
      */
-    _this.isUndefined = function (val) {
+    _this.isUndefined = function isUndefined(val) {
         return undefined === val;
     };
     /**
      * @param {*} val
      * @returns {boolean}
      */
-    _this.isNull = function (val) {
+    _this.isNull = function isNull(val) {
         return null === val;
     };
     /**
      * @param {*} val
      * @returns {boolean}
      */
-    _this.isNaN = function (val) {
+    _this.isNaN = function isNaN(val) {
         return !_this.isNumber(val);
     };
     /**
      * @param {*} val
      * @returns {boolean}
      */
-    _this.isBoolean = function (val) {
+    _this.isBoolean = function isBoolean(val) {
         return 'boolean' === typeof val;
     };
     /**
      * @param {*} val
      * @returns {boolean}
      */
-    _this.isNumeric = function (val) {
+    _this.isNumeric = function isNumeric(val) {
         return Number(val) == val;
     };
     /**
      * @param {*} val
      * @returns {boolean}
      */
-    _this.isNumber = function (val) {
+    _this.isNumber = function isNumber(val) {
         return Number(val) === val;
     };
     /**
      * @param {*} val
      * @returns {boolean}
      */
-    _this.isInteger = function (val) {
+    _this.isInteger = function isInteger(val) {
         return _this.isNumber(val) && 0 === val % 1 && !_this.isNaN(val % 1);
     };
     /**
      * @param {*} val
      * @returns {boolean}
      */
-    _this.isFloat = function (val) {
+    _this.isFloat = function isFloat(val) {
         var re;
         if (_this.isInteger(val)) {
             re = true;
@@ -271,49 +270,49 @@ var OJSO = OJSO || new function () {
      * @param {*} val
      * @returns {boolean}
      */
-    _this.isFinite = function (val) {
+    _this.isFinite = function isFinite(val) {
         return _this.isNumber(val) && isFinite(val);
     };
     /**
      * @param {*} val
      * @returns {boolean}
      */
-    _this.isInfinite = function (val) {
+    _this.isInfinite = function isInfinite(val) {
         return _this.isNumber(val) && !isFinite(val);
     };
     /**
      * @param {*} val
      * @returns {boolean}
      */
-    _this.isString = function (val) {
+    _this.isString = function isString(val) {
         return 'string' === typeof val;
     };
     /**
      * @param {*} val
      * @returns {boolean}
      */
-    _this.isFunction = function (val) {
+    _this.isFunction = function isFunction(val) {
         return 'function' === typeof val;
     };
     /**
      * @param {*} val
      * @returns {boolean}
      */
-    _this.isArray = function (val) {
+    _this.isArray = function isArray(val) {
         return Array.isArray(val);
     };
     /**
      * @param {*} val
      * @returns {boolean}
      */
-    _this.isObject = function (val) {
+    _this.isObject = function isObject(val) {
         return 'object' === typeof val && !_this.isArray(val) && !_this.isNull(val);
     };
     /**
      * @param {*} val
      * @returns {boolean}
      */
-    _this.isSet = function (val) {
+    _this.isSet = function isSet(val) {
         var re;
         if (_this.isNull(val) || _this.isUndefined(val)) {
             re = false;
@@ -322,7 +321,7 @@ var OJSO = OJSO || new function () {
         } else if (isNaN(val)) {
             re = false;
         } else {
-            throw 'unable to solve: isSet(' + val + '); typeof ' + val + ' === unknown'
+            throw 'unable to solve: isSet(' + val + '); typeof ' + val + ' === unknown';
         }
         return re;
     };
@@ -330,7 +329,7 @@ var OJSO = OJSO || new function () {
      * @param {*} val
      * @returns {boolean}
      */
-    _this.isEmpty = function (val) {
+    _this.isEmpty = function isEmpty(val) {
         var re;
         var name;
         if (_this.isUndefined(val) || _this.isNull(val) || '' === val) {
@@ -346,7 +345,7 @@ var OJSO = OJSO || new function () {
         } else if (isNaN(val)) {
             re = true;
         } else {
-            throw 'unable to solve: isEmpty(' + val + '); typeof ' + val + ' === unknown'
+            throw 'unable to solve: isEmpty(' + val + '); typeof ' + val + ' === unknown';
         }
         return re;
     };
@@ -354,7 +353,7 @@ var OJSO = OJSO || new function () {
      * @param {*} val
      * @returns {boolean}
      */
-    _this.toBoolean = function (val) {
+    _this.toBoolean = function toBoolean(val) {
         var re;
         var str;
         if (_this.isBoolean(val)) {
@@ -391,14 +390,24 @@ var OJSO = OJSO || new function () {
     };
     /**
      * @todo toNumber
+     * @todo write test
+     *
+     * @param {*} val
+     * @returns {number}
      */
-    _this.toNumber = function () {
+    _this.toNumber = function toNumber(val) {
+        var re = Number(val);
+        if (_this.isNumber(re)) {
+            return re;
+        } else if (_this.isNaN(re)) {
+            return _this.toNumber(_this.toBoolean(val));
+        }
     };
     /**
      * @param {*} val
      * @returns {number}
      */
-    _this.toInteger = function (val) {
+    _this.toInteger = function toInteger(val) {
         var re;
         var str;
         if (_this.isInteger(val)) {
@@ -426,7 +435,7 @@ var OJSO = OJSO || new function () {
      * @param {*} val
      * @returns {number}
      */
-    _this.toFloat = function (val) {
+    _this.toFloat = function toFloat(val) {
         var re;
         var str;
         if (_this.isFloat(val)) {
@@ -458,7 +467,7 @@ var OJSO = OJSO || new function () {
      * @param {*} val
      * @returns {string}
      */
-    _this.toString = function (val) {
+    _this.toString = function toString(val) {
         var re;
         if (_this.isArray(val) || _this.isObject(val)) {
             re = JSON.stringify(val);
@@ -471,4725 +480,36 @@ var OJSO = OJSO || new function () {
      * @todo toFunction
      * @todo validate usefulness
      */
-    _this.toFunction = function () {
+    _this.toFunction = function toFunction() {
     };
     /**
      * @todo toArray
+     * @todo write test
      */
-    _this.toArray = function () {
+    _this.toArray = function toArray(val) {
+        var re;
+        if (_this.isArray(val)) {
+            return re;
+        } else {
+        }
     };
     /**
      * @todo toHash
      */
-    _this.toHash = function () {
+    _this.toHash = function toHash() {
     };
     /**
      * @todo toObject
      */
-    _this.toObject = function () {
+    _this.toObject = function toObject() {
     };
     /**
-     * @todo new tests
-     * @todo micro time benchmark for lib
+     * @returns {Event}
      * @constructor
      */
-    _this.TestClass = function () {
+    var Event = function Event() {
         /* keyword this in this class context */
         var _this = this;
-        /**
-         * @type {string}
-         */
-        var separatorStrTest = '#########################';
-        var separatorStrCase = '-------------------------';
-        /**
-         * @todo preg_match preg_replace, regExp
-         * @todo replace str replace regex
-         * @todo floor ceil
-         * @todo tofixed for round
-         * @todo funciton with body empty
-         * @todo funciton with body
-         * @todo case -0.1 +0.1
-         * @todo -0 and 0 comparison
-         * @todo fix in valid testcases
-         * @type {{null: null, undefined: undefined, NaN: Number, boolFalse: boolean, boolTrue: boolean, intMinus10: number, intMinus9: number, intMinus1: number, int0: number, int1: number, int9: number, int10: number, intMinus9007199254740992: number, int9007199254740992: number, int999999999999999: number, int9999999999999999: number, int10000000000000000: number, floatMinus12dot234: number, floatMinus1dot2: number, float0dot0: number, float0dot12: number, float1dot2: number, float12dot234: number, floatInaccurate: number, exponentialMinus123e5: number, exponentialMinus123eMinus5: number, exponential123eMinus5: number, exponential123e5: number, binary0b11: number, octal0o17: number, hexadecimal0x1F: number, Finite: number, InfiniteNegative: number, InfinitePositive: Number, strEmpty: string, strfalse: string, strFALSE: string, strtrue: string, strTrue: string, str0: string, str0dot0: string, str1: string, str1dot0: string, str12dot34: string, strAa: string, str1234asdf: string, strasdf1234: string, str1234asdf1234: string, strasdf1234asdf: string, funcAnonymous: funcAnonymous, functestFunction: Window.testFunction2, functestFunctionName: (Window.testFunction2|*), arrEmpty: Array, arr: [number,number], objEmpty: {}, obj: {a: number, b: number}}}
-         */
-        var testCaseHash = {
-            null: null,
-            undefined: undefined,
-            NaN: NaN,
-            boolFalse: false,
-            boolTrue: true,
-            intMinus10: -10,
-            intMinus9: -9,
-            intMinus1: -1,
-            int0: 0,
-            int1: 1,
-            int9: 9,
-            int10: 10,
-            intMinus9007199254740992: -9007199254740992,
-            int9007199254740992: 9007199254740992,
-            int999999999999999: 999999999999999,
-            int9999999999999999: 9999999999999999,
-            int10000000000000000: 10000000000000000,
-            floatMinus12dot234: -12.234,
-            floatMinus1dot2: -1.2,
-            float0dot0: 0.0,
-            float0dot12: 0.12,
-            float1dot2: 1.2,
-            float12dot234: 12.234,
-            floatInaccurate: 0.2 + 0.1,
-            exponentialMinus123e5: -123e5,
-            exponentialMinus123eMinus5: -123e-5,
-            exponential123eMinus5: 123e-5,
-            exponential123e5: 123e5,
-            binary0b11: Number('0b11'),
-            octal0o17: Number('0o17'),
-            hexadecimal0x1F: 0x1F,
-            Finite: 1,
-            InfiniteNegative: -Infinity,
-            InfinitePositive: Infinity,
-            strEmpty: '',
-            strfalse: 'false',
-            strFALSE: 'FALSE',
-            strtrue: 'true',
-            strTrue: 'True',
-            str0: '0',
-            str0dot0: '0.0',
-            str1: '1',
-            str1dot0: '1.0',
-            str12dot34: '12.34',
-            strAa: 'Aa',
-            str1234asdf: '1234asdf',
-            strasdf1234: 'asdf1234',
-            str1234asdf1234: '1234asdf1234',
-            strasdf1234asdf: 'asdf1234asdf',
-            funcAnonymous: function () {
-            },
-            functestFunction: window.testFunction = function testFunction2() {
-            },
-            functestFunctionName: testFunction,
-            arrEmpty: [],
-            arr: [1, 2],
-            objEmpty: {},
-            obj: {a: 1, b: 2}
-        };
-        /**
-         */
-        var testHash = {
-            isSet: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: true
-                }
-            ],
-            isEmpty: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: false
-                }, {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: false
-                }
-            ],
-            isNull: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: false
-                }
-            ],
-            isUndefined: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: false
-                }
-            ],
-            isNaN: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: true
-                }
-            ],
-            isBoolean: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: false
-                }
-            ],
-            isNumber: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: false
-                }
-            ],
-            isNumeric: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: false
-                }
-            ],
-            isInteger: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: false
-                }
-            ],
-            isFloat: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: false
-                }
-            ],
-            isFinite: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: false
-                }
-            ],
-            isInfinite: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: false
-                }
-            ],
-            isString: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: false
-                }
-            ],
-            isFunction: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: false
-                }
-            ],
-            isArray: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: false
-                }
-            ],
-            isObject: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: true
-                }
-            ],
-            toBoolean: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: true
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: false
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: true
-                }
-            ],
-            toInteger: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: 1
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: -10
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: -9
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: -1
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: 1
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: 9
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: 10
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: -9007199254740992
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: 9007199254740992
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: 999999999999999
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: 9999999999999999
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: 10000000000000000
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: -12
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: -1
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: 1
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: 12
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: -12300000
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: -0
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: 12300000
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: 3
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: 15
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: 31
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: 1
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: 1
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: 1
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: 1
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: 1
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: 1
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: 12
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: 1234
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: 1234
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: 1
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: 1
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: 1
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: 1
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: 0
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: 1
-                }
-            ],
-            toFloat: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: 0.0
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: 0.0
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: 0.0
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: 0.0
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: 1.0
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: -10.0
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: -9.0
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: -1.0
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: 0.0
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: 1.0
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: 9.0
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: 10.0
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: -9007199254740992.0
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: 9007199254740992.0
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: 999999999999999.0
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: 9999999999999999.0
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: 10000000000000000.0
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: -12.234
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: -1.2
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: 0.0
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: 0.12
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: 1.2
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: 12.234
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: 0.30000000000000004
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: -12300000.0
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: -0.00123
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: 0.00123
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: 12300000.0
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: 3.0
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: 15.0
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: 31.0
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: 1.0
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: 0.0
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: 1.0
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: 0.0
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: 0.0
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: 0.0
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: 1.0
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: 1.0
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: 0.0
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: 0.0
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: 1.0
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: 1.0
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: 12.34
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: 0.0
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: 1234.0
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: 0.0
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: 1234.0
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: 0.0
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: 1.0
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: 1.0
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: 1.0
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: 0.0
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: 1.0
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: 0.0
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: 1.0
-                }
-            ],
-            toString: [
-                {
-                    inputValue: testCaseHash.null,
-                    returnValue: 'null'
-                },
-                {
-                    inputValue: testCaseHash.undefined,
-                    returnValue: 'undefined'
-                },
-                {
-                    inputValue: testCaseHash.NaN,
-                    returnValue: 'NaN'
-                },
-                {
-                    inputValue: testCaseHash.boolFalse,
-                    returnValue: 'false'
-                },
-                {
-                    inputValue: testCaseHash.boolTrue,
-                    returnValue: 'true'
-                },
-                {
-                    inputValue: testCaseHash.intMinus10,
-                    returnValue: '-10'
-                },
-                {
-                    inputValue: testCaseHash.intMinus9,
-                    returnValue: '-9'
-                },
-                {
-                    inputValue: testCaseHash.intMinus1,
-                    returnValue: '-1'
-                },
-                {
-                    inputValue: testCaseHash.int0,
-                    returnValue: '0'
-                },
-                {
-                    inputValue: testCaseHash.int1,
-                    returnValue: '1'
-                },
-                {
-                    inputValue: testCaseHash.int9,
-                    returnValue: '9'
-                },
-                {
-                    inputValue: testCaseHash.int10,
-                    returnValue: '10'
-                },
-                {
-                    inputValue: testCaseHash.intMinus9007199254740992,
-                    returnValue: '-9007199254740992'
-                },
-                {
-                    inputValue: testCaseHash.int9007199254740992,
-                    returnValue: '9007199254740992'
-                },
-                {
-                    inputValue: testCaseHash.int999999999999999,
-                    returnValue: '999999999999999'
-                },
-                {
-                    inputValue: testCaseHash.int9999999999999999,
-                    returnValue: '10000000000000000'
-                },
-                {
-                    inputValue: testCaseHash.int10000000000000000,
-                    returnValue: '10000000000000000'
-                },
-                {
-                    inputValue: testCaseHash.floatMinus12dot234,
-                    returnValue: '-12.234'
-                },
-                {
-                    inputValue: testCaseHash.floatMinus1dot2,
-                    returnValue: '-1.2'
-                },
-                {
-                    inputValue: testCaseHash.float0dot0,
-                    returnValue: '0'
-                },
-                {
-                    inputValue: testCaseHash.float0dot12,
-                    returnValue: '0.12'
-                },
-                {
-                    inputValue: testCaseHash.float1dot2,
-                    returnValue: '1.2'
-                },
-                {
-                    inputValue: testCaseHash.float12dot234,
-                    returnValue: '12.234'
-                },
-                {
-                    inputValue: testCaseHash.floatInaccurate,
-                    returnValue: '0.30000000000000004'
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123e5,
-                    returnValue: '-12300000'
-                },
-                {
-                    inputValue: testCaseHash.exponentialMinus123eMinus5,
-                    returnValue: '-0.00123'
-                },
-                {
-                    inputValue: testCaseHash.exponential123eMinus5,
-                    returnValue: '0.00123'
-                },
-                {
-                    inputValue: testCaseHash.exponential123e5,
-                    returnValue: '12300000'
-                },
-                {
-                    inputValue: testCaseHash.binary0b11,
-                    returnValue: '3'
-                },
-                {
-                    inputValue: testCaseHash.octal0o17,
-                    returnValue: '15'
-                },
-                {
-                    inputValue: testCaseHash.hexadecimal0x1F,
-                    returnValue: '31'
-                },
-                {
-                    inputValue: testCaseHash.Finite,
-                    returnValue: '1'
-                },
-                {
-                    inputValue: testCaseHash.InfiniteNegative,
-                    returnValue: '-Infinity'
-                },
-                {
-                    inputValue: testCaseHash.InfinitePositive,
-                    returnValue: 'Infinity'
-                },
-                {
-                    inputValue: testCaseHash.strEmpty,
-                    returnValue: ''
-                },
-                {
-                    inputValue: testCaseHash.strfalse,
-                    returnValue: 'false'
-                },
-                {
-                    inputValue: testCaseHash.strFALSE,
-                    returnValue: 'FALSE'
-                },
-                {
-                    inputValue: testCaseHash.strtrue,
-                    returnValue: 'true'
-                },
-                {
-                    inputValue: testCaseHash.strTrue,
-                    returnValue: 'True'
-                },
-                {
-                    inputValue: testCaseHash.str0,
-                    returnValue: '0'
-                },
-                {
-                    inputValue: testCaseHash.str0dot0,
-                    returnValue: '0.0'
-                },
-                {
-                    inputValue: testCaseHash.str1,
-                    returnValue: '1'
-                },
-                {
-                    inputValue: testCaseHash.str1dot0,
-                    returnValue: '1.0'
-                },
-                {
-                    inputValue: testCaseHash.str12dot34,
-                    returnValue: '12.34'
-                },
-                {
-                    inputValue: testCaseHash.strAa,
-                    returnValue: 'Aa'
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf,
-                    returnValue: '1234asdf'
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234,
-                    returnValue: 'asdf1234'
-                },
-                {
-                    inputValue: testCaseHash.str1234asdf1234,
-                    returnValue: '1234asdf1234'
-                },
-                {
-                    inputValue: testCaseHash.strasdf1234asdf,
-                    returnValue: 'asdf1234asdf'
-                },
-                {
-                    inputValue: testCaseHash.funcAnonymous,
-                    returnValue: 'function () {\n' +
-                    '            }'
-                },
-                {
-                    inputValue: testCaseHash.functestFunction,
-                    returnValue: 'function testFunction2() {\n' +
-                    '            }'
-                },
-                {
-                    inputValue: testCaseHash.functestFunctionName,
-                    returnValue: 'function testFunction2() {\n' +
-                    '            }'
-                },
-                {
-                    inputValue: testCaseHash.arrEmpty,
-                    returnValue: '[]'
-                },
-                {
-                    inputValue: testCaseHash.arr,
-                    returnValue: '[1,2]'
-                },
-                {
-                    inputValue: testCaseHash.objEmpty,
-                    returnValue: '{}'
-                },
-                {
-                    inputValue: testCaseHash.obj,
-                    returnValue: '{"a":1,"b":2}'
-                }
-            ],
-        };
-        /**
-         */
-        var testSeparator = function () {
-            console.log(separatorStrTest + separatorStrTest + separatorStrTest);
-        };
-        /**
-         */
-        var caseSeparator = function () {
-            console.log(separatorStrCase + separatorStrCase);
-        };
-        /**
-         * @param {string} func
-         * @param {*} val
-         * @param {*} expected
-         * @param {string} i
-         */
-        var testCase = function (func, val, expected, i) {
-            var benchmarkId = func + '(' + val + ')';
-            _thisNamespace.BenchmarkObj.begin(benchmarkId);
-            var re = _thisNamespace[func](val);
-            _thisNamespace.BenchmarkObj.end(benchmarkId, false);
-            if (expected !== re) {
-                caseSeparator();
-                console.log('case:');
-                console.log(Object.keys(testCaseHash)[i]);
-                console.log('input:');
-                console.log(val);
-                console.log('output:');
-                console.log(re);
-                console.log('expected:');
-                console.log(expected);
-                console.log('benchmark:');
-                _thisNamespace.BenchmarkObj.dump(benchmarkId);
-            }
-        };
-        /**
-         * @todo console.log swap to log debug function
-         * @param {string} test
-         */
-        var runTest = function (test) {
-            var i;
-            testSeparator();
-            console.log(test + ' testing in progress...');
-            for (i in testHash[test]) {
-                testCase(test, testHash[test][i].inputValue, testHash[test][i].returnValue, i);
-            }
-            caseSeparator();
-            console.log('...' + test + ' successful finished!');
-        };
-        /**
-         */
-        var startTestAll = function () {
-            var test;
-            for (test in testHash) {
-                runTest(test);
-            }
-            testSeparator();
-            _thisNamespace.BenchmarkObj.dumpAll(0);
-        };
-        /* constructor */
-        (function () {
-            startTestAll();
-        })();
-    };
-    /**
-     * @type {_thisNamespace.EventClass}
-     */
-    var EventObj;
-    /**
-     * @returns {_thisNamespace.EventClass}
-     * @constructor
-     */
-    _this.EventClass = function () {
-        /* singleton */
-        if (EventObj instanceof _thisNamespace.EventClass) {
-            return EventObj;
-        }
-        /* keyword this in this class context */
-        var _this = this;
-        /**
-         * @type {string}
-         */
-        _this.click = 'click';
-        /**
-         * @type {string}
-         */
-        _this.change = 'change';
-        /**
-         * @type {string}
-         */
-        _this.keyUp = 'keyup';
         /**
          * @type {string}
          */
@@ -5198,442 +518,900 @@ var OJSO = OJSO || new function () {
          * @param {string} event
          * @returns {string}
          */
-        _this.onEvent = function (event) {
+        _this.onEvent = function onEvent(event) {
             return _this.on + event;
         };
-        /* constructor */
-        (function () {
-            EventObj = _this;
-        })();
+        /**
+         * @constructor
+         */
+        var Mouse = function Mouse() {
+            /* keyword this in this class context */
+            var _this = this;
+            /**
+             * The event occurs when the user clicks on an element
+             *
+             * @type {string}
+             */
+            _this.click = 'click';
+            /**
+             * The event occurs when the user right-clicks on an element to open a context menu
+             *
+             * @type {string}
+             */
+            _this.contextMenu = 'contextmenu';
+            /**
+             * The event occurs when the user double-clicks on an element
+             *
+             * @type {string}
+             */
+            _this.doubleClick = 'dblclick';
+            /**
+             * The event occurs when the user presses a mouse button over an element
+             *
+             * @type {string}
+             */
+            _this.mouseDown = 'mousedown';
+            /**
+             * The event occurs when the pointer is moved onto an element
+             *
+             * @type {string}
+             */
+            _this.mouseEnter = 'mouseenter';
+            /**
+             * The event occurs when the pointer is moved out of an element
+             *
+             * @type {string}
+             */
+            _this.mouseLeave = 'mouseleave';
+            /**
+             * The event occurs when the pointer is moving while it is over an element
+             *
+             * @type {string}
+             */
+            _this.mouseMove = 'mousemove';
+            /**
+             * The event occurs when a user moves the mouse pointer out of an element, or out of one of its children
+             *
+             * @type {string}
+             */
+            _this.mouseOut = 'mouseout';
+            /**
+             * The event occurs when the pointer is moved onto an element, or onto one of its children
+             *
+             * @type {string}
+             */
+            _this.mouseOver = 'mouseover';
+            /**
+             * The event occurs when a user releases a mouse button over an element
+             *
+             * @type {string}
+             */
+            _this.mouseUp = 'mouseup';
+        };
+        /**
+         * singleton
+         *
+         * work-around for visibility of object-content-value in js-api
+         *
+         * @type {Mouse}
+         */
+        _this.Mouse = new Mouse();
+        _this.getMouse = function () {
+            return Mouse;
+        };
+        /**
+         * @constructor
+         */
+        var Keyboard = function Keyboard() {
+            /* keyword this in this class context */
+            var _this = this;
+            /**
+             * The event occurs when the user is pressing a key
+             *
+             * @type {string}
+             */
+            _this.keyDown = 'keydown';
+            /**
+             * The event occurs when the user presses a key
+             *
+             * @type {string}
+             */
+            _this.keyPress = 'keypress';
+            /**
+             * The event occurs when the user releases a key
+             *
+             * @type {string}
+             */
+            _this.keyUp = 'keyup';
+        };
+        /**
+         * singleton
+         *
+         * work-around for visibility of object-content-value in js-api
+         *
+         * @type {Keyboard}
+         */
+        _this.Keyboard = new Keyboard();
+        _this.getKeyboard = function () {
+            return Keyboard;
+        };
+        /**
+         * @constructor
+         */
+        var Frame = function () {
+            /* keyword this in this class context */
+            var _this = this;
+            /**
+             * The event occurs when the loading of a resource has been aborted
+             *
+             * @type {string}
+             */
+            _this.abord = 'abord';
+            /**
+             * The event occurs before the document is about to be unloaded
+             *
+             * @type {string}
+             */
+            _this.beforeUnload = 'beforeunload';
+            /**
+             * The event occurs when an error occurs while loading an external file
+             *
+             * @type {string}
+             */
+            _this.error = 'error';
+            /**
+             * The event occurs when there has been changes to the anchor part of a URL
+             *
+             * @type {string}
+             */
+            _this.hashChange = 'hashchange';
+            /**
+             * The event occurs when an object has loaded
+             *
+             * @type {string}
+             */
+            _this.load = 'load';
+            /**
+             * The event occurs when the user navigates away from a webpage
+             *
+             * @type {string}
+             */
+            _this.pageHide = 'pagehide';
+            /**
+             * The event occurs when the user navigates to a webpage
+             *
+             * @type {string}
+             */
+            _this.pageShow = 'pageshow';
+            /**
+             * The event occurs when the document view is resized
+             *
+             * @type {string}
+             */
+            _this.resize = 'resize';
+            /**
+             * The event occurs when an element's scrollbar is being scrolled
+             *
+             * @type {string}
+             */
+            _this.scroll = 'scroll';
+            /**
+             * The event occurs once a page has unloaded (for <body>)
+             *
+             * @type {string}
+             */
+            _this.unload = 'unload';
+        };
+        /**
+         * singleton
+         *
+         * work-around for visibility of object-content-value in js-api
+         *
+         * @type {Frame}
+         */
+        _this.Frame = new Frame();
+        _this.getFrame = function () {
+            return Frame;
+        };
+        /**
+         * @constructor
+         */
+        var Drag = function () {
+            /* keyword this in this class context */
+            var _this = this;
+            /**
+             * The event occurs when an element is being dragged
+             *
+             * @type {string}
+             */
+            _this.drag = 'drag';
+            /**
+             * The event occurs when the user has finished dragging an element
+             *
+             * @type {string}
+             */
+            _this.dragEnd = 'dragend';
+            /**
+             * The event occurs when the dragged element enters the drop target
+             *
+             * @type {string}
+             */
+            _this.dragEnter = 'dragenter';
+            /**
+             * The event occurs when the dragged element leaves the drop target
+             *
+             * @type {string}
+             */
+            _this.dragLeave = 'dragleave';
+            /**
+             * The event occurs when the dragged element is over the drop target
+             *
+             * @type {string}
+             */
+            _this.dragOver = 'dragover';
+            /**
+             * The event occurs when the user starts to drag an element
+             *
+             * @type {string}
+             */
+            _this.dragStart = 'dragstart';
+            /**
+             * The event occurs when the dragged element is dropped on the drop target
+             *
+             * @type {string}
+             */
+            _this.drop = 'drop';
+        };
+        /**
+         * singleton
+         *
+         * work-around for visibility of object-content-value in js-api
+         *
+         * @type {Drag}
+         */
+        _this.Drag = new Drag();
+        _this.getDrag = function () {
+            return Drag;
+        };
+        /**
+         * @constructor
+         */
+        var Clipboard = function () {
+            /* keyword this in this class context */
+            var _this = this;
+            /**
+             * The event occurs when the user copies the content of an element
+             *
+             * @type {string}
+             */
+            _this.copy = 'copy';
+            /**
+             * The event occurs when the user cuts the content of an element
+             *
+             * @type {string}
+             */
+            _this.cut = 'cut';
+            /**
+             *
+             The event occurs when the user pastes some content in an element
+             *
+             * @type {string}
+             */
+            _this.paste = 'paste';
+        };
+        /**
+         * singleton
+         *
+         * work-around for visibility of object-content-value in js-api
+         *
+         * @type {Clipboard}
+         */
+        _this.Clipboard = new Clipboard();
+        _this.getClipboard = function () {
+            return Clipboard;
+        };
+        /**
+         * @constructor
+         */
+        var Print = function () {
+            /* keyword this in this class context */
+            var _this = this;
+            /**
+             * The event occurs when a page has started printing, or if the print dialogue box has been closed
+             *
+             * @type {string}
+             */
+            _this.afterPrint = 'afterprint';
+            /**
+             * The event occurs when a page is about to be printed
+             *
+             * @type {string}
+             */
+            _this.beforePrint = 'beforeprint';
+        };
+        /**
+         * singleton
+         *
+         * work-around for visibility of object-content-value in js-api
+         *
+         * @type {Print}
+         */
+        _this.Print = new Print();
+        _this.getPrint = function () {
+            return Print;
+        };
+        /**
+         * @constructor
+         */
+        var Media = function () {
+            /* keyword this in this class context */
+            var _this = this;
+            /**
+             * The event occurs when the loading of a media is aborted
+             *
+             * @type {string}
+             */
+            _this.abort = 'abort';
+            /**
+             * The event occurs when the browser can start playing the media (when it has buffered enough to begin)
+             *
+             * @type {string}
+             */
+            _this.canPlay = 'canplay';
+            /**
+             * The event occurs when the browser can play through the media without stopping for buffering
+             *
+             * @type {string}
+             */
+            _this.canPlayThrough = 'canplaythrough';
+            /**
+             * The event occurs when the duration of the media is changed
+             *
+             * @type {string}
+             */
+            _this.durationChange = 'durationchange';
+            /**
+             * The event occurs when something bad happens and the media file is suddenly unavailable (like unexpectedly disconnects)
+             *
+             * @type {string}
+             */
+            _this.emptied = 'emptied';
+            /**
+             * The event occurs when the media has reach the end (useful for messages like "thanks for listening")
+             *
+             * @type {string}
+             */
+            _this.ended = 'ended';
+            /**
+             * The event occurs when an error occurred during the loading of a media file
+             *
+             * @type {string}
+             */
+            _this.error = 'error';
+            /**
+             * The event occurs when media data is loaded
+             *
+             * @type {string}
+             */
+            _this.loadedData = 'loadeddata';
+            /**
+             * The event occurs when meta data (like dimensions and duration) are loaded
+             *
+             * @type {string}
+             */
+            _this.loadedMetaData = 'loadedmetadata';
+            /**
+             * The event occurs when the browser starts looking for the specified media
+             *
+             * @type {string}
+             */
+            _this.loadStart = 'loadstart';
+            /**
+             * The event occurs when the media is paused either by the user or programmatically
+             *
+             * @type {string}
+             */
+            _this.pause = 'pause';
+            /**
+             * The event occurs when the media has been started or is no longer paused
+             *
+             * @type {string}
+             */
+            _this.play = 'play';
+            /**
+             * The event occurs when the media is playing after having been paused or stopped for buffering
+             *
+             * @type {string}
+             */
+            _this.playing = 'playing';
+            /**
+             * The event occurs when the browser is in the process of getting the media data (downloading the media)
+             *
+             * @type {string}
+             */
+            _this.progress = 'progress';
+            /**
+             * The event occurs when the playing speed of the media is changed
+             *
+             * @type {string}
+             */
+            _this.rateChange = 'ratechange';
+            /**
+             * The event occurs when the user is finished moving/skipping to a new position in the media
+             *
+             * @type {string}
+             */
+            _this.seeked = 'seeked';
+            /**
+             * The event occurs when the user starts moving/skipping to a new position in the media
+             *
+             * @type {string}
+             */
+            _this.seeking = 'seeking';
+            /**
+             * The event occurs when the browser is trying to get media data, but data is not available
+             *
+             * @type {string}
+             */
+            _this.stalled = 'stalled';
+            /**
+             * The event occurs when the browser is intentionally not getting media data
+             *
+             * @type {string}
+             */
+            _this.suspend = 'suspend';
+            /**
+             * The event occurs when the playing position has changed (like when the user fast forwards to a different point in the media)
+             *
+             * @type {string}
+             */
+            _this.timeUpdate = 'timeupdate';
+            /**
+             * The event occurs when the volume of the media has changed (includes setting the volume to "mute")
+             *
+             * @type {string}
+             */
+            _this.volumeChange = 'volumechange';
+            /**
+             * The event occurs when the media has paused but is expected to resume (like when the media pauses to buffer more data)
+             *
+             * @type {string}
+             */
+            _this.waiting = 'waiting';
+        };
+        /**
+         * singleton
+         *
+         * work-around for visibility of object-content-value in js-api
+         *
+         * @type {Media}
+         */
+        _this.Media = new Media();
+        _this.getMedia = function () {
+            return Media;
+        };
+        /**
+         * @constructor
+         */
+        var Animation = function () {
+            /* keyword this in this class context */
+            var _this = this;
+            /**
+             * The event occurs when a CSS animation has completed
+             *
+             * @type {string}
+             */
+            _this.animationEnd = 'animationend';
+            /**
+             * The event occurs when a CSS animation is repeated
+             *
+             * @type {string}
+             */
+            _this.animationIteration = 'animationiteration';
+            /**
+             * The event occurs when a CSS animation has started
+             *
+             * @type {string}
+             */
+            _this.animationStart = 'animationstart';
+        };
+        /**
+         * singleton
+         *
+         * work-around for visibility of object-content-value in js-api
+         *
+         * @type {Animation}
+         */
+        _this.Animation = new Animation();
+        _this.getAnimation = function () {
+            return Animation;
+        };
+        /**
+         * @constructor
+         */
+        var Transition = function () {
+            /* keyword this in this class context */
+            var _this = this;
+            /**
+             * The event occurs when a CSS transition has completed
+             *
+             * @type {string}
+             */
+            _this.transitionEnd = 'transitionend';
+        };
+        /**
+         * singleton
+         *
+         * work-around for visibility of object-content-value in js-api
+         *
+         * @type {Transition}
+         */
+        _this.Transition = new Transition();
+        _this.getTransition = function () {
+            return Transition;
+        };
+        /**
+         * @constructor
+         */
+        var ServerSent = function () {
+            /* keyword this in this class context */
+            var _this = this;
+            /**
+             * The event occurs when an error occurs with the event source
+             *
+             * @type {string}
+             */
+            _this.error = 'error';
+            /**
+             * The event occurs when a message is received through the event source
+             *
+             * @type {string}
+             */
+            _this.message = 'message';
+            /**
+             * The event occurs when a connection with the event source is opened
+             *
+             * @type {string}
+             */
+            _this.open = 'open';
+        };
+        /**
+         * singleton
+         *
+         * work-around for visibility of object-content-value in js-api
+         *
+         * @type {ServerSent}
+         */
+        _this.ServerSent = new ServerSent();
+        _this.getServerSent = function () {
+            return ServerSent;
+        };
+        /**
+         * @constructor
+         */
+        var Misc = function () {
+            /* keyword this in this class context */
+            var _this = this;
+            /**
+             * The event occurs when a message is received through or from an object (WebSocket, Web Worker, Event Source or a child frame or a parent window)
+             *
+             * @type {string}
+             */
+            _this.message = 'message';
+            /**
+             * Deprecated. Use the onwheel event instead onmousewheel
+             *
+             * @type {string}
+             */
+            _this.mouseWheel = 'mousewheel';
+            /**
+             * The event occurs when the browser starts to work offline
+             *
+             * @type {string}
+             */
+            _this.offline = 'offline';
+            /**
+             * The event occurs when the browser starts to work online
+             *
+             * @type {string}
+             */
+            _this.online = 'online';
+            /**
+             * The event occurs when the window's history changes
+             *
+             * @type {string}
+             */
+            _this.popState = 'popstate';
+            /**
+             * The event occurs when a <menu> element is shown as a context menu
+             *
+             * @type {string}
+             */
+            _this.show = 'show';
+            /**
+             * The event occurs when a Web Storage area is updated
+             *
+             * @type {string}
+             */
+            _this.storage = 'storage';
+            /**
+             * The event occurs when the user opens or closes the <details> element
+             *
+             * @type {string}
+             */
+            _this.toggle = 'toggle';
+            /**
+             * The event occurs when the mouse wheel rolls up or down over an element
+             *
+             * @type {string}
+             */
+            _this.wheel = 'wheel';
+        };
+        /**
+         * singleton
+         * work-around for visibility of object-content-value in js-api
+         *
+         * @type {Misc}
+         */
+        _this.Misc = new Misc();
+        _this.getMisc = function () {
+            return Misc;
+        };
+        /**
+         * @constructor
+         */
+        var Touch = function () {
+            /* keyword this in this class context */
+            var _this = this;
+            /**
+             * The event occurs when the touch is interrupted
+             *
+             * @type {string}
+             */
+            _this.touchCancel = 'touchcancel';
+            /**
+             * The event occurs when a finger is removed from a touch screen
+             *
+             * @type {string}
+             */
+            _this.touchEnd = 'touchend';
+            /**
+             * The event occurs when a finger is dragged across the screen
+             *
+             * @type {string}
+             */
+            _this.touchMove = 'touchmove';
+            /**
+             * The event occurs when a finger is placed on a touch screen
+             *
+             * @type {string}
+             */
+            _this.touchStart = 'touchstart';
+        };
+        /**
+         * singleton
+         *
+         * work-around for visibility of object-content-value in js-api
+         *
+         * @type {Touch}
+         */
+        _this.Touch = new Touch();
+        /**
+         * @returns {Touch}
+         */
+        _this.getTouch = function () {
+            return Touch;
+        };
     };
     /**
      * singleton
-     * @type {_thisNamespace.DOMHandlerClass}
+     * @type {Event}
      */
-    var DOMHandlerObj;
+    _this.Event = new Event();
     /**
-     * @returns {_thisNamespace.DOMHandlerClass}
+     * @returns {Event}
+     */
+    _this.getEvent = function () {
+        return Event;
+    };
+    /**
+     * @todo window and document
      * @constructor
      */
-    _this.DOMHandlerClass = function () {
-        /* singleton */
-        if (DOMHandlerObj instanceof _thisNamespace.DOMHandlerClass) {
-            return DOMHandlerObj;
-        }
+    var Css = function () {
+        /* keyword this in this class context */
+        var _this = this;
+        /**
+         * @constructor
+         */
+        var Identifier = function () {
+            /* keyword this in this class context */
+            var _this = this;
+            /**
+             * @type {string}
+             */
+            _this.class = '.';
+            /**
+             * @type {string}
+             */
+            _this.id = '#';
+            /**
+             * @type {string}
+             */
+            _this.tag = '';
+        };
+        /**
+         * @type {Identifier}
+         */
+        _this.Identifier = new Identifier();
+        /**
+         * @returns {Identifier}
+         */
+        _this.getIdentifier = function () {
+            return Identifier;
+        };
+        /**
+         * @param {string} selector
+         * @returns {string}
+         */
+        _this.getClassSelector = function (selector) {
+            return _this.getSelector(_this.Identifier.class, selector);
+        };
+        /**
+         * @param {string} selector
+         * @returns {string}
+         */
+        _this.getIdSelector = function (selector) {
+            return _this.getSelector(_this.Identifier.id, selector);
+        };
+        /**
+         * @param {string} selector
+         * @returns {string}
+         */
+        _this.getTagSelector = function (selector) {
+            return _this.getSelector(_this.Identifier.tag, selector);
+        };
+        /**
+         * @param {string} attributeName
+         * @param {string} attributeValue
+         * @returns {string}
+         */
+        _this.getAttributeSelector = function (attributeName, attributeValue) {
+            return '[' + attributeName + '="' + attributeValue + '"]';
+        };
+        /**
+         * @param {string} identifier
+         * @param {string} selector
+         * @returns {string}
+         */
+        _this.getSelector = function (identifier, selector) {
+            return identifier + selector;
+        };
+        /**
+         * @constructor
+         */
+        var Tag = function () {
+            /* keyword this in this class context */
+            var _this = this;
+            /**
+             * @type {string}
+             */
+            _this.a = 'a';
+            /**
+             * @type {string}
+             */
+            _this.div = 'div';
+            /**
+             * @type {string}
+             */
+            _this.p = 'p';
+            /**
+             * @type {string}
+             */
+            _this.span = 'span';
+            /**
+             * @type {string}
+             */
+            _this.table = 'table';
+            /**
+             * @type {string}
+             */
+            _this.td = 'td';
+            /**
+             * @type {string}
+             */
+            _this.tr = 'tr';
+        };
+        /**
+         * singleton
+         * @type {Tag}
+         */
+        _this.Tag = new Tag();
+        /**
+         * @returns {Tag}
+         */
+        _this.getTag = function () {
+            return Tag;
+        };
+    };
+    /**
+     * singleton
+     * @type {Css}
+     */
+    _this.Css = new Css();
+    /**
+     * @returns {Css}
+     */
+    _this.getCssSelector = function () {
+        return Css;
+    };
+    /**
+     * @type {DOMHandler&Css}
+     * @constructor
+     */
+    /**
+     * @constructor
+     */
+    var DOMHandler = function DOMHandler() {
         /* keyword this in this class context */
         var _this = this;
         /* extends simple inheritance */
-        _thisNamespace.EventClass.call(_this);
+        // Event.call(_this);
+        /* extends simple inheritance */
+        // Css.call(_this);
         /**
-         * @type {HTMLDocument}
+         * @type {Event}
          */
-        _this.document = document;
+        _this.Event = _thisNamespace.Event;
         /**
-         * @type {jQuery|HTMLElement}
+         * @type {Css}
          */
-        _this.$doc = {};
+        _this.Css = _thisNamespace.Css;
         /**
          * @param {string} selector
          * @returns {*|jQuery|HTMLElement}
          */
-        _this.selectDOMElement = function (selector) {
+        _this.selectDOMElement = function selectDOMElement(selector) {
             return jQuery(selector);
         };
-        /* constructor */
-        (function () {
-            _this.$doc = _this.selectDOMElement(_this.document);
-            DOMHandlerObj = _this;
-        })()
     };
-    _this.BenchmarkObj.end(benchmarkId);
+    /**
+     * @type {DOMHandler&Event}
+     */
+    /**
+     * @type {DOMHandler}
+     */
+    _this.DOMHandler = new DOMHandler();
+    /**
+     * @todo entire location
+     * @constructor
+     */
+    var Location = function Location() {
+        /* keyword this in this class context */
+        var _this = this;
+        _this.getHash = function () {
+            return location.hash;
+        };
+        _this.setHash = function () {
+            return location.hash;
+        };
+        _this.hash = function (hash) {
+            if (_this.isUndefined(hash)) {
+                return location.hash;
+            }
+            location.hash = hash;
+        };
+        _this.reload = function () {
+            location.reload();
+        };
+    };
+    /**
+     * singleton
+     *
+     * work-around for visibility of object-content-value in js-api
+     *
+     * @type {Location}
+     */
+    _this.Location = new Location();
 };
-// console.log(OJSO);
-// var DOMHandlerObj = new OJSO.DOMHandlerClass();
-// console.log(DOMHandlerObj);
-// (new OJSO.TestClass());
-// var c = 1000000;
-// var benchmarkId = '{}toInt' + c;
-// var Benchmark = new OJSO.BenchmarkClass(benchmarkId);
-// var Benchmark = OJSO.BenchmarkObj;
-// Benchmark.begin(benchmarkId);
-// for (var i = 0; i < c; i++) {
-//     OJSO.toInteger({});
-// if (1) {
-// }
-// } else {
-// }
-// Benchmark.end(benchmarkId);
-// var benchmarkId = 'truetoInt' + c;
-// Benchmark.begin(benchmarkId);
-// for (var i = 0; i < c; i++) {
-// OJSO.toInteger({});
-// switch (1) {
-//     case 1:
-//         break;
-//     default:
-//         break;
-// }
-// }
-// Benchmark.end(benchmarkId);
-// Benchmark.end(runTestAllId);
-// Benchmark.dumpAll(0);
-// console.log((new Date()).getTime() - OJSO.startTime);
-// console.log(OJSO.isInteger(0));
-// console.log(OJSO.isInteger(0.0));
-// console.log(OJSO.isInteger(1));
-// console.log(OJSO.isInteger(1.2));
-// console.log(OJSO.isFloat(0));
-// console.log(OJSO.isFloat(0.0));
-// console.log(OJSO.isFloat(1));
-// console.log(OJSO.isFloat(1.2));
-// console.log(OJSO.isInteger(NaN));
-// console.log(OJSO.isFloat(NaN));
-// console.log(OJSO);
-// console.log(new OJSO.DummyClass(1));
-// console.log(new OJSO.DummyClass(2));
-// console.log(OJSO);
-// console.log((new Date()).getTime() - OJSO.startTime);
-// try catch final?
-// /**
-//  * class SimulationObject handles simulated objects
-//  *
-//  * @author Mirko Krotzek <mirko.krotzek@googlemail.com>
-//  * @package physic engine
-//  * @subpackge object
-//  * @method pseudo class
-//  */
-// log = function (value, text, bool) {
-//
-// //  if (text !== undefined) {
-// //     var bool = true;
-// //  }
-//     if (text === undefined) {
-//         text = '';
-//     }
-//
-//     /* get type of value */
-//     var type = Object.prototype.toString.call(value);
-//     type = type.substring(8, type.length - 1);
-//
-//     text += type;
-//
-//     /* get length of value */
-//     if (type === 'String') {
-//         text += '(' + value.length + ')';
-//     }
-//     else if (type === 'Object' || type === 'Array') {
-//         text += '(' + Object.keys(value).length + ')';
-// //     text += ' ' + eval(value);
-// //     text += ' ' + val(value);
-// //     text += ' ' + eval(JSON.parse(value));
-// //     text += ' ' + JSON.parse(value);
-//     }
-//
-//     /* add value */
-//     text += ' ' + value;
-//
-//
-// //  if (type === 'Object') {
-// //     for (var prop in value) {
-// ////          log(value.prop);
-// //        text = "\n" + log(value[prop], text, true);
-// //     }
-// //  }
-// //  if (bool) {
-// //     return text;
-// //  }
-// //  var test = eval("(" + value + ");");
-// //  console.log(test);
-//     console.debug(value);
-//     console.debug((value));
-//     console.debug(value);
-//     console.debug((value));
-//
-//     console.log(value);
-//     console.log((value));
-//     console.log(value);
-//     console.log((value));
-//
-//     console.debug(text);
-//     console.log(text);
-// //  console.debug(text);
-// //  console.log('__________________________________________________');
-//     return console.log('--------------------------------------------------');
-// //  return console.log(typeof value + (typeof value === 'string' ? '(' + value.length + ')' : '') + ' ' + value);
-// //     if(typeof value === 'object'){
-// //        for(var key in value){
-// ////             log(value[key], indention + 4);
-// //        }
-// //     }
-// };
-// dump = function () {
-//
-// };
-//
-// //console.log("Fruits array");
-// //var objectFruits_array = '["pineaple","strawberry","apple","banana"]';
-// //var valFruits_array = eval("(" + objectFruits_array + ")");
-// //console.debug(valFruits_array);
-// //var objectFruits_array = ["pineaple", "strawberry", "apple", "banana"];
-// //var objectFruits_array = (objectFruits_array);
-// //console.debug(objectFruits_array);
-// //exit;
-//
-// //################################################################################################
-//
-// log('Test undefined: ');
-//
-// log();
-//
-// log(val);
-//
-// var val;
-// log(val);
-//
-// //################################################################################################
-//
-// log('Test null: ');
-//
-// log(null);
-//
-// val = 1;
-// log(val);
-//
-// val = null;
-// log(val);
-//
-// //################################################################################################
-//
-// log('Test boolean: ');
-//
-// log(true);
-//
-// log(false);
-//
-// var bool = true;
-// log(bool);
-//
-// bool = false;
-// log(bool);
-//
-// //################################################################################################
-//
-// log('Test integer: ');
-//
-// log(12);
-//
-// var int = 123;
-// log(int);
-//
-// int = NaN;
-// log(int);
-//
-// //################################################################################################
-//
-// log('Test float: ');
-//
-// log(12.34);
-//
-// var float = 123.456;
-// log(float);
-//
-// exit;
-// //################################################################################################
-//
-// log('Test String: ');
-//
-// log('');
-//
-// log(' ');
-//
-// log('asdf');
-//
-// log('123');
-//
-// log('asdf123');
-//
-// log('123asdf');
-//
-// var str = 'str';
-// log(str);
-//
-// //################################################################################################
-//
-// log('Test Array: ');
-//
-// var arr = [];
-// log(arr);
-//
-// arr = [1, '2', [3, '4', [5, '6'], 7], 8, 9, [10, 11], 12, 13];
-// log(arr);
-//
-// arr = new Array();
-// log(arr);
-//
-// arr = new Array(14, '15', [16, '17', new Array(18, '19'), 20], 21, 22, [23, 24], 25, 26);
-// log(arr);
-//
-// //################################################################################################
-//
-// log('Test Object: ');
-//
-// var obj = {};
-// log(obj);
-//
-// obj = {
-//     a: 1,
-//     b: '2',
-//     c: function () {
-//         return arr[0] + 3;
-//     },
-//     d: {
-//         e: 4,
-//         f: 5
-//     },
-//     g: 6
-// };
-// log(obj);
-//
-// obj = new Object();
-// log(obj);
-//
-// obj = new Object(7, '8');
-// log(obj);
-//
-// obj = new Object(
-//     h = 9,
-//     i = '10',
-//     j = function () {
-//         return arr[0] + 11;
-//     }
-// );
-// log(obj);
-//
-// obj = new Object(
-//     k = 12,
-//     l = '13',
-//     m = {
-//         n: 14,
-//         o: 15
-//     },
-//     p = function () {
-//         return arr[0] + 16;
-//     },
-//     q = new Object(
-//         r = 17,
-//         s = '18',
-//         t = {
-//             u: 19,
-//             v: '20',
-//             w: function () {
-//                 return obj.h + 21;
-//             },
-//             x: {
-//                 y: 22,
-//                 z: function () {
-//                     return obj[h] + 23;
-//                 },
-//                 aa: {
-//                     ab: 24
-//                 },
-//             }
-//         },
-//         new Object(25),
-//         {
-//             26: 27,
-//             28: new Object(29)
-//         }
-//     )
-// );
-// log(obj);
-//
-// //################################################################################################
-//
-// log('Test new Object: ');
-//
-// log(new Boolean());
-//
-// log(new Boolean(true));
-//
-// log(new Number());
-//
-// log(new Number(123));
-//
-// log(new Number(123.456));
-//
-// //log(new Integer());
-// //log(new float());
-//
-// log(new String());
-//
-// log(new String('asdf'));
-//
-// log(new Array());
-//
-// log(new Array(1, 2, 3));
-//
-// log([]);
-//
-// log([1, 2, 3]);
-//
-// log(new Object());
-//
-// log(new Object(1, 2, 'b'));
-//
-// log(new Object(a = 1, b = 2, c = function () {
-//     return 4;
-// }));
-//
-// log({});
-//
-// function test(tex) {
-//     return tex + 3;
-// }
-//
-// //test = function(tex) {
-// //  return tex + 3;
-// //}
-// log({
-//     a: 1, b: 2, c: test(), d: function () {
-//         return 5;
-//     }
-// });
-//
-// log({
-//     a: 1, b: 2, c: function (tex) {
-//         return tex + 3;
-//     }, d: function () {
-//         return 5;
-//     }
-// });
-//
-// //################################################################################################
-//
-// log('Test XML: ');
-//
-// var xml = '<?xml version="1.0" encoding="UTF-8"?><mediamarkt><hardware>1</hardware></mediamarkt>';
-// xml = (new DOMParser()).parseFromString(xml, "text/xml")
-// log(xml);
-//
-// //################################################################################################
-//
-// log('Test function: ');
-//
-// var func = function (test) {
-//     return 1;
-// };
-// log(func);
-//
-// log(func());
-//
-// log(func(3));
-//
-// function foo(test) {
-//     return 2;
-// }
-//
-// log(foo);
-//
-// log(foo());
-//
-// log(foo(2));
+OJSO = new OJSO();
