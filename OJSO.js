@@ -1,4 +1,3 @@
-var jQuery = jQuery;
 /**
  * OJSO JavaScript Library v0.2alpha
  *
@@ -18,7 +17,7 @@ var jQuery = jQuery;
  * @todo location
  * @todo no shortcut vars params methods
  */
-var OJSO = function () {
+var OJSO = function OJSO() {
     'use strict';
     /* keyword this in this class context */
     var _this = this;
@@ -34,21 +33,21 @@ var OJSO = function () {
         /* keyword this in this class context */
         var _this = this;
         /**
-         * @param {*} param1
+         * @param {*} parameter
          */
-        var traitFunction1 = function traitFunction1(param1) {
+        var traitFunctionPrivate = function traitFunctionPrivate(parameter) {
         };
         /**
-         * @param {*} param1
+         * @param {*} parameter
          */
-        _this.traitFunction2 = function traitFunction2(param1) {
+        _this.traitFunctionPublic = function traitFunctionPublic(parameter) {
         };
     };
     /**
-     * @param {*} param1
+     * @param {string} parameter
      * @constructor
      */
-    _this.DummyParent = function DummyParent(param1) {
+    _this.DummyParent = function DummyParent(parameter) {
         /* keyword this in this class context */
         var _this = this;
         /**
@@ -60,43 +59,44 @@ var OJSO = function () {
          */
         _this.publicParent = 'I am public parent';
         /**
-         * @param {*} param1
-         * @returns {*}
+         * @param {string} parameter
+         * @returns {string}
          */
-        var privateMethod = function (param1) {
-            return param1;
+        var privateMethod = function privateMethod(parameter) {
+            privateParent += parameter;
+            return privateParent;
         };
         /**
-         * @param {*} param1
-         * @returns {*}
+         * @param {string} parameter
+         * @returns {string}
          */
-        _this.publicMethod = function (param1) {
-            return param1;
+        _this.publicMethod = function publicMethod(parameter) {
+            return privateMethod(parameter);
         };
         /* constructor */
-        (function (param1) {
-            _this.publicParent += param1;
-        })(param1);
+        (function (parameter) {
+            _this.publicParent += parameter;
+        })(parameter);
     };
     /**
      * singleton
      * @type {Dummy}
      */
-    var DummyObj = null;
+    var Dummy;
     /**
-     * @param {*} param1
+     * @param {string} parameter
      * @returns {Dummy}
      * @constructor
      */
-    _this.Dummy = function Dummy(param1) {
+    _this.Dummy = function Dummy(parameter) {
         /* singleton */
-        if (DummyObj instanceof _thisNamespace.Dummy) {
-            return DummyObj;
+        if (Dummy instanceof _thisNamespace.Dummy) {
+            return Dummy;
         }
         /* keyword this in this class context */
         var _this = this;
         /* extends simple inheritance */
-        _thisNamespace.DummyParent.call(_this, param1);
+        _thisNamespace.DummyParent.call(_this, parameter);
         /* trait use */
         _thisNamespace.DummyTrait.call(_this);
         /**
@@ -104,29 +104,30 @@ var OJSO = function () {
          */
         var privateProperty = 0;
         /**
-         * @param {number} param1
-         * @returns {*}
-         */
-        var privateMethod = function privateMethod(param1) {
-            return privateProperty += param1;
-        };
-        /**
          * @type {number}
          */
         _this.publicProperty = 1;
         /**
-         * @param {number} param1
-         * @returns {*}
+         * @param {number} parameter
+         * @returns {number}
          */
-        _this.publicMethod = function publicMethod(param1) {
-            return _this.publicProperty += param1;
+        var privateMethod = function privateMethod(parameter) {
+            privateProperty += parameter;
+            return privateProperty;
+        };
+        /**
+         * @param {number} parameter
+         * @returns {number}
+         */
+        _this.publicMethod = function publicMethod(parameter) {
+            return privateMethod(parameter);
         };
         /* constructor */
-        (function (param1) {
-            _this.publicParent += param1 + ' in child';
+        (function (parameter) {
+            _this.publicParent += parameter + ' in child';
             /* singleton */
-            DummyObj = _this;
-        })(param1);
+            Dummy = _this;
+        })(parameter);
     };
     /**
      * @returns {number}
@@ -166,14 +167,8 @@ var OJSO = function () {
          */
         _this.end = function end(id, dump) {
             benchmarkCaseHash[id].end = _thisNamespace.getMicroTime();
-            var dumpBool;
-            if (_thisNamespace.isUndefined(dump)) {
-                dumpBool = true;
-            } else {
-                dumpBool = dump;
-            }
             benchmarkCaseHash[id].time = benchmarkCaseHash[id].end - benchmarkCaseHash[id].begin;
-            if (dumpBool) {
+            if (_thisNamespace.isUndefined(dump) || dump) {
                 _this.dump(id);
             }
         };
@@ -183,17 +178,19 @@ var OJSO = function () {
         _this.dump = function dump(id) {
             console.log('benchmark run-time analysis: ' + id + ' = ' + benchmarkCaseHash[id].time + 'ms');
         };
-        /**
-         * @param {number} ifTimeGreaterThan
-         */
-        _this.dumpAll = function dumpAll(ifTimeGreaterThan) {
-            var ifTimeGreaterThanInt = ifTimeGreaterThan;
-            var id;
-            if (_thisNamespace.isUndefined(ifTimeGreaterThanInt)) {
-                ifTimeGreaterThanInt = -1;
+        /** */
+        _this.dumpAll = function dumpAll() {
+            for (var id in benchmarkCaseHash) {
+                _this.dump(id);
             }
-            for (id in benchmarkCaseHash) {
-                if (benchmarkCaseHash[id].time > ifTimeGreaterThanInt) {
+        };
+        /**
+         * @param {number} minRunTime
+         */
+        _this.dumpAllGreaterThan = function dumpAllGreaterThan(minRunTime) {
+            var minRunTimeNumber = _thisNamespace.isUndefined(minRunTime) ? -1 : minRunTime;
+            for (var id in benchmarkCaseHash) {
+                if (benchmarkCaseHash[id].time > minRunTimeNumber) {
                     _this.dump(id);
                 }
             }
@@ -205,186 +202,197 @@ var OJSO = function () {
         })(id);
     };
     /**
-     * @param {*} val
+     * @param {*} value
      * @returns {boolean}
      */
-    _this.isUndefined = function isUndefined(val) {
-        return undefined === val;
+    _this.isUndefined = function isUndefined(value) {
+        return undefined === value;
     };
     /**
-     * @param {*} val
+     * @param {*} value
      * @returns {boolean}
      */
-    _this.isNull = function isNull(val) {
-        return null === val;
+    _this.isNull = function isNull(value) {
+        return null === value;
     };
     /**
-     * @param {*} val
+     * @param {*} value
      * @returns {boolean}
      */
-    _this.isNaN = function isNaN(val) {
-        return !_this.isNumber(val);
+    _this.isNaN = function isNaN(value) {
+        return !_this.isNumber(value);
     };
     /**
-     * @param {*} val
+     * @param {*} value
      * @returns {boolean}
      */
-    _this.isBoolean = function isBoolean(val) {
-        return 'boolean' === typeof val;
+    _this.isBoolean = function isBoolean(value) {
+        return 'boolean' === typeof value;
     };
     /**
-     * @param {*} val
+     * @param {*} value
      * @returns {boolean}
      */
-    _this.isNumeric = function isNumeric(val) {
-        return Number(val) == val;
+    _this.isNumeric = function isNumeric(value) {
+        return Number(value) == value;
     };
     /**
-     * @param {*} val
+     * @param {*} value
      * @returns {boolean}
      */
-    _this.isNumber = function isNumber(val) {
-        return Number(val) === val;
+    _this.isNumber = function isNumber(value) {
+        return Number(value) === value;
     };
     /**
-     * @param {*} val
+     * @param {*} value
      * @returns {boolean}
      */
-    _this.isInteger = function isInteger(val) {
-        return _this.isNumber(val) && 0 === val % 1 && !_this.isNaN(val % 1);
+    _this.isInteger = function isInteger(value) {
+        return _this.isNumber(value) && 0 === value % 1 && !_this.isNaN(value % 1);
     };
     /**
-     * @param {*} val
+     * @param {*} value
      * @returns {boolean}
      */
-    _this.isFloat = function isFloat(val) {
+    _this.isFloat = function isFloat(value) {
+        return _this.isInteger(value) || (_this.isNumber(value) && 0 !== value % 1 && !_this.isNaN(value % 1));
+    };
+    /**
+     * @param {*} value
+     * @returns {boolean}
+     */
+    _this.isFinite = function isFinite(value) {
+        return _this.isNumber(value) && isFinite(value);
+    };
+    /**
+     * @param {*} value
+     * @returns {boolean}
+     */
+    _this.isInfinite = function isInfinite(value) {
+        return _this.isNumber(value) && !isFinite(value);
+    };
+    /**
+     * @param {*} value
+     * @returns {boolean}
+     */
+    _this.isString = function isString(value) {
+        return 'string' === typeof value;
+    };
+    /**
+     * @param {*} value
+     * @returns {boolean}
+     */
+    _this.isFunction = function isFunction(value) {
+        return 'function' === typeof value;
+    };
+    /**
+     * @param {*} value
+     * @returns {boolean}
+     */
+    _this.isArray = function isArray(value) {
+        return Array.isArray(value);
+    };
+    /**
+     * @param {*} value
+     * @returns {boolean}
+     */
+    _this.isObject = function isObject(value) {
+        return 'object' === typeof value && !_this.isArray(value) && !_this.isNull(value);
+    };
+    /**
+     * @param {*} value
+     * @returns {boolean}
+     */
+    _this.isSet = function isSet(value) {
         var re;
-        if (_this.isInteger(val)) {
+        if (_this.isNull(value) || _this.isUndefined(value)) {
+            re = false;
+        }
+        else if (_this.isBoolean(value) || _this.isNumber(value) || _this.isInfinite(value) || _this.isString(value) || _this.isFunction(value) || _this.isArray(value) || _this.isObject(value)) {
             re = true;
-        } else {
-            re = _this.isNumber(val) && 0 !== val % 1 && !_this.isNaN(val % 1);
+        }
+        else if (isNaN(value)) {
+            re = false;
+        }
+        else {
+            throw 'unable to solve: isSet(' + value + '); typeof ' + value + ' === unknown';
         }
         return re;
     };
     /**
-     * @param {*} val
+     * @param {*} value
      * @returns {boolean}
      */
-    _this.isFinite = function isFinite(val) {
-        return _this.isNumber(val) && isFinite(val);
-    };
-    /**
-     * @param {*} val
-     * @returns {boolean}
-     */
-    _this.isInfinite = function isInfinite(val) {
-        return _this.isNumber(val) && !isFinite(val);
-    };
-    /**
-     * @param {*} val
-     * @returns {boolean}
-     */
-    _this.isString = function isString(val) {
-        return 'string' === typeof val;
-    };
-    /**
-     * @param {*} val
-     * @returns {boolean}
-     */
-    _this.isFunction = function isFunction(val) {
-        return 'function' === typeof val;
-    };
-    /**
-     * @param {*} val
-     * @returns {boolean}
-     */
-    _this.isArray = function isArray(val) {
-        return Array.isArray(val);
-    };
-    /**
-     * @param {*} val
-     * @returns {boolean}
-     */
-    _this.isObject = function isObject(val) {
-        return 'object' === typeof val && !_this.isArray(val) && !_this.isNull(val);
-    };
-    /**
-     * @param {*} val
-     * @returns {boolean}
-     */
-    _this.isSet = function isSet(val) {
+    _this.isEmpty = function isEmpty(value) {
         var re;
-        if (_this.isNull(val) || _this.isUndefined(val)) {
-            re = false;
-        } else if (_this.isBoolean(val) || _this.isNumber(val) || _this.isInfinite(val) || _this.isString(val) || _this.isFunction(val) || _this.isArray(val) || _this.isObject(val)) {
+        if (_this.isUndefined(value) || _this.isNull(value) || '' === value) {
             re = true;
-        } else if (isNaN(val)) {
-            re = false;
-        } else {
-            throw 'unable to solve: isSet(' + val + '); typeof ' + val + ' === unknown';
         }
-        return re;
-    };
-    /**
-     * @param {*} val
-     * @returns {boolean}
-     */
-    _this.isEmpty = function isEmpty(val) {
-        var re;
-        var name;
-        if (_this.isUndefined(val) || _this.isNull(val) || '' === val) {
-            re = true;
-        } else if (_this.isBoolean(val) || _this.isNumber(val) || _this.isInfinite(val) || _this.isString(val) || _this.isFunction(val)) {
+        else if (_this.isBoolean(value) || _this.isNumber(value) || _this.isInfinite(value) || _this.isString(value) || _this.isFunction(value)) {
             re = false;
-        } else if (_this.isArray(val) || _this.isObject(val)) {
+        }
+        else if (_this.isArray(value) || _this.isObject(value)) {
             re = true;
-            for (name in val) {
+            for (var name in value) {
                 re = false;
                 break;
             }
-        } else if (isNaN(val)) {
+        }
+        else if (isNaN(value)) {
             re = true;
-        } else {
-            throw 'unable to solve: isEmpty(' + val + '); typeof ' + val + ' === unknown';
+        }
+        else {
+            throw 'unable to solve: isEmpty(' + value + '); typeof ' + value + ' === unknown';
         }
         return re;
     };
     /**
-     * @param {*} val
+     * @param {*} value
      * @returns {boolean}
      */
-    _this.toBoolean = function toBoolean(val) {
+    _this.toBoolean = function toBoolean(value) {
         var re;
-        var str;
-        if (_this.isBoolean(val)) {
-            re = val;
-        } else if (_this.isNull(val) || _this.isUndefined(val)) {
+        if (_this.isBoolean(value)) {
+            re = value;
+        }
+        else if (_this.isNull(value) || _this.isUndefined(value)) {
             re = false;
-        } else if (_this.isInteger(val)) {
-            re = 0 !== val;
-        } else if (_this.isFloat(val)) {
-            re = 0.0 !== val;
-        } else if (_this.isInfinite(val)) {
-            re = -Infinity !== val;
-        } else if (_this.isString(val)) {
-            str = val.toLowerCase();
+        }
+        else if (_this.isInteger(value)) {
+            re = 0 !== value;
+        }
+        else if (_this.isFloat(value)) {
+            re = 0.0 !== value;
+        }
+        else if (_this.isInfinite(value)) {
+            re = -Infinity !== value;
+        }
+        else if (_this.isString(value)) {
+            var str = value.toLowerCase();
             if ('false' === str) {
                 re = false;
-            } else if ('true' === str) {
-                re = true;
-            } else if ('0' === str || '0.0' === str) {
-                re = false;
-            } else {
-                re = !!val;
             }
-        } else if (_this.isFunction(val)) {
+            else if ('true' === str) {
+                re = true;
+            }
+            else if ('0' === str || '0.0' === str) {
+                re = false;
+            }
+            else {
+                re = !!value;
+            }
+        }
+        else if (_this.isFunction(value)) {
             re = true;
-        } else if (_this.isArray(val) || _this.isObject(val)) {
-            re = !_this.isEmpty(val);
-        } else if (isNaN(val)) {
+        }
+        else if (_this.isArray(value) || _this.isObject(value)) {
+            re = !_this.isEmpty(value);
+        }
+        else if (isNaN(value)) {
             re = false;
-        } else {
-            re = !!val;
+        }
+        else {
+            re = !!value;
         }
         return re;
     };
@@ -392,39 +400,39 @@ var OJSO = function () {
      * @todo toNumber
      * @todo write test
      *
-     * @param {*} val
+     * @param {*} value
      * @returns {number}
      */
-    _this.toNumber = function toNumber(val) {
-        var re = Number(val);
+    _this.toNumber = function toNumber(value) {
+        var re = Number(value);
         if (_this.isNumber(re)) {
             return re;
-        } else if (_this.isNaN(re)) {
-            return _this.toNumber(_this.toBoolean(val));
+        }
+        else if (_this.isNaN(re)) {
+            return _this.toNumber(_this.toBoolean(value));
         }
     };
     /**
-     * @param {*} val
+     * @param {*} value
      * @returns {number}
      */
-    _this.toInteger = function toInteger(val) {
+    _this.toInteger = function toInteger(value) {
         var re;
-        var str;
-        if (_this.isInteger(val)) {
-            re = val;
-        } else if (_this.isBoolean(val)) {
-            re = val ? 1 : 0;
-        } else if (_this.isNull(val) || _this.isUndefined(val) || _this.isInfinite(val) || _this.isFunction(val) || _this.isArray(val) || _this.isObject(val)) {
-            re = _this.toInteger(_this.toBoolean(val));
-        } else if (_this.isString(val)) {
-            str = val.toLowerCase();
-            if ('false' === str || 'true' === str) {
-                re = _this.toInteger(_this.toBoolean(str));
-            } else {
-                re = parseInt(val);
-            }
-        } else {
-            re = parseInt(val);
+        if (_this.isInteger(value)) {
+            re = value;
+        }
+        else if (_this.isBoolean(value)) {
+            re = value ? 1 : 0;
+        }
+        else if (_this.isNull(value) || _this.isUndefined(value) || _this.isInfinite(value) || _this.isFunction(value) || _this.isArray(value) || _this.isObject(value)) {
+            re = _this.toInteger(_this.toBoolean(value));
+        }
+        else if (_this.isString(value)) {
+            var str = value.toLowerCase();
+            re = 'false' === str || 'true' === str ? _this.toInteger(_this.toBoolean(str)) : parseInt(value);
+        }
+        else {
+            re = parseInt(value);
         }
         if (isNaN(re)) {
             re = 0;
@@ -432,31 +440,26 @@ var OJSO = function () {
         return re;
     };
     /**
-     * @param {*} val
+     * @param {*} value
      * @returns {number}
      */
-    _this.toFloat = function toFloat(val) {
+    _this.toFloat = function toFloat(value) {
         var re;
-        var str;
-        if (_this.isFloat(val)) {
-            re = val;
-        } else if (_this.isBoolean(val)) {
-            if (val) {
-                re = 1.0;
-            } else {
-                re = 0.0;
-            }
-        } else if (_this.isNull(val) || _this.isUndefined(val) || _this.isInfinite(val) || _this.isFunction(val) || _this.isArray(val) || _this.isObject(val)) {
-            re = _this.toFloat(_this.toBoolean(val));
-        } else if (_this.isString(val)) {
-            str = val.toLowerCase();
-            if ('false' === str || 'true' === str) {
-                re = _this.toFloat(_this.toBoolean(str));
-            } else {
-                re = parseFloat(val);
-            }
-        } else {
-            re = parseFloat(val);
+        if (_this.isFloat(value)) {
+            re = value;
+        }
+        else if (_this.isBoolean(value)) {
+            re = value ? 1.0 : 0.0;
+        }
+        else if (_this.isNull(value) || _this.isUndefined(value) || _this.isInfinite(value) || _this.isFunction(value) || _this.isArray(value) || _this.isObject(value)) {
+            re = _this.toFloat(_this.toBoolean(value));
+        }
+        else if (_this.isString(value)) {
+            var str = value.toLowerCase();
+            re = 'false' === str || 'true' === str ? _this.toFloat(_this.toBoolean(str)) : parseFloat(value);
+        }
+        else {
+            re = parseFloat(value);
         }
         if (isNaN(re)) {
             re = 0;
@@ -464,34 +467,39 @@ var OJSO = function () {
         return re;
     };
     /**
-     * @param {*} val
+     * @param {*} value
      * @returns {string}
      */
-    _this.toString = function toString(val) {
-        var re;
-        if (_this.isArray(val) || _this.isObject(val)) {
-            re = JSON.stringify(val);
-        } else {
-            re = '' + val;
-        }
-        return re;
+    _this.toString = function toString(value) {
+        return _this.isArray(value) || _this.isObject(value) ? JSON.stringify(value) : '' + value;
     };
     /**
      * @todo toFunction
      * @todo validate usefulness
      */
-    _this.toFunction = function toFunction() {
+    _this.toFunction = function toFunction(value) {
+        return _thisNamespace.isFunction(value) ? value : function () {
+            return value;
+        };
     };
     /**
      * @todo toArray
      * @todo write test
      */
-    _this.toArray = function toArray(val) {
+    _this.toArray = function toArray(value) {
         var re;
-        if (_this.isArray(val)) {
-            return re;
-        } else {
+        if (_this.isArray(value)) {
+            re = value;
         }
+        else if (_this.isObject(value)) {
+            re = [];
+            for (var i in value) {
+                re.push(value.i);
+            }
+        } else {
+            re = [value];
+        }
+        return re;
     };
     /**
      * @todo toHash
@@ -544,7 +552,13 @@ var OJSO = function () {
              *
              * @type {string}
              */
-            _this.doubleClick = 'dblclick';
+            _this.dblClick = 'dblclick';
+            /**
+             * The event occurs when the user double-clicks on an element
+             *
+             * @type {string}
+             */
+            _this.doubleClick = _this.dblClick;
             /**
              * The event occurs when the user presses a mouse button over an element
              *
@@ -587,6 +601,12 @@ var OJSO = function () {
              * @type {string}
              */
             _this.mouseUp = 'mouseup';
+            /**
+             * The event occurs when the user right-clicks on an element to open a context menu
+             *
+             * @type {string}
+             */
+            _this.rightClick = _this.contextMenu;
         };
         /**
          * singleton
@@ -596,7 +616,10 @@ var OJSO = function () {
          * @type {Mouse}
          */
         _this.Mouse = new Mouse();
-        _this.getMouse = function () {
+        /**
+         * @returns {Mouse}
+         */
+        _this.getMouse = function getMouse() {
             return Mouse;
         };
         /**
@@ -632,13 +655,16 @@ var OJSO = function () {
          * @type {Keyboard}
          */
         _this.Keyboard = new Keyboard();
-        _this.getKeyboard = function () {
+        /**
+         * @returns {Keyboard}
+         */
+        _this.getKeyboard = function getKeyboard() {
             return Keyboard;
         };
         /**
          * @constructor
          */
-        var Frame = function () {
+        var Frame = function Frame() {
             /* keyword this in this class context */
             var _this = this;
             /**
@@ -672,13 +698,13 @@ var OJSO = function () {
              */
             _this.load = 'load';
             /**
-             * The event occurs when the user navigates away from a webpage
+             * The event occurs when the user navigates away from a web page
              *
              * @type {string}
              */
             _this.pageHide = 'pagehide';
             /**
-             * The event occurs when the user navigates to a webpage
+             * The event occurs when the user navigates to a web page
              *
              * @type {string}
              */
@@ -710,13 +736,16 @@ var OJSO = function () {
          * @type {Frame}
          */
         _this.Frame = new Frame();
-        _this.getFrame = function () {
+        /**
+         * @returns {Frame}
+         */
+        _this.getFrame = function getFrame() {
             return Frame;
         };
         /**
          * @constructor
          */
-        var Drag = function () {
+        var Drag = function Drag() {
             /* keyword this in this class context */
             var _this = this;
             /**
@@ -770,13 +799,16 @@ var OJSO = function () {
          * @type {Drag}
          */
         _this.Drag = new Drag();
-        _this.getDrag = function () {
+        /**
+         * @returns {Drag}
+         */
+        _this.getDrag = function getDrag() {
             return Drag;
         };
         /**
          * @constructor
          */
-        var Clipboard = function () {
+        var Clipboard = function Clipboard() {
             /* keyword this in this class context */
             var _this = this;
             /**
@@ -807,13 +839,16 @@ var OJSO = function () {
          * @type {Clipboard}
          */
         _this.Clipboard = new Clipboard();
-        _this.getClipboard = function () {
+        /**
+         * @returns {Clipboard}
+         */
+        _this.getClipboard = function getClipboard() {
             return Clipboard;
         };
         /**
          * @constructor
          */
-        var Print = function () {
+        var Print = function Print() {
             /* keyword this in this class context */
             var _this = this;
             /**
@@ -837,13 +872,16 @@ var OJSO = function () {
          * @type {Print}
          */
         _this.Print = new Print();
-        _this.getPrint = function () {
+        /**
+         * @returns {Print}
+         */
+        _this.getPrint = function getPrint() {
             return Print;
         };
         /**
          * @constructor
          */
-        var Media = function () {
+        var Media = function Media() {
             /* keyword this in this class context */
             var _this = this;
             /**
@@ -987,13 +1025,16 @@ var OJSO = function () {
          * @type {Media}
          */
         _this.Media = new Media();
-        _this.getMedia = function () {
+        /**
+         * @returns {Media}
+         */
+        _this.getMedia = function getMedia() {
             return Media;
         };
         /**
          * @constructor
          */
-        var Animation = function () {
+        var Animation = function Animation() {
             /* keyword this in this class context */
             var _this = this;
             /**
@@ -1023,13 +1064,16 @@ var OJSO = function () {
          * @type {Animation}
          */
         _this.Animation = new Animation();
-        _this.getAnimation = function () {
+        /**
+         * @returns {Animation}
+         */
+        _this.getAnimation = function getAnimation() {
             return Animation;
         };
         /**
          * @constructor
          */
-        var Transition = function () {
+        var Transition = function Transition() {
             /* keyword this in this class context */
             var _this = this;
             /**
@@ -1047,13 +1091,16 @@ var OJSO = function () {
          * @type {Transition}
          */
         _this.Transition = new Transition();
-        _this.getTransition = function () {
+        /**
+         * @returns {Transition}
+         */
+        _this.getTransition = function getTransition() {
             return Transition;
         };
         /**
          * @constructor
          */
-        var ServerSent = function () {
+        var ServerSent = function ServerSent() {
             /* keyword this in this class context */
             var _this = this;
             /**
@@ -1083,13 +1130,16 @@ var OJSO = function () {
          * @type {ServerSent}
          */
         _this.ServerSent = new ServerSent();
-        _this.getServerSent = function () {
+        /**
+         * @returns {ServerSent}
+         */
+        _this.getServerSent = function getServerSent() {
             return ServerSent;
         };
         /**
          * @constructor
          */
-        var Misc = function () {
+        var Misc = function Misc() {
             /* keyword this in this class context */
             var _this = this;
             /**
@@ -1099,7 +1149,7 @@ var OJSO = function () {
              */
             _this.message = 'message';
             /**
-             * Deprecated. Use the onwheel event instead onmousewheel
+             * Deprecated. Use the on wheel event instead on mouse wheel
              *
              * @type {string}
              */
@@ -1154,13 +1204,16 @@ var OJSO = function () {
          * @type {Misc}
          */
         _this.Misc = new Misc();
-        _this.getMisc = function () {
+        /**
+         * @returns {Misc}
+         */
+        _this.getMisc = function getMisc() {
             return Misc;
         };
         /**
          * @constructor
          */
-        var Touch = function () {
+        var Touch = function Touch() {
             /* keyword this in this class context */
             var _this = this;
             /**
@@ -1199,7 +1252,7 @@ var OJSO = function () {
         /**
          * @returns {Touch}
          */
-        _this.getTouch = function () {
+        _this.getTouch = function getTouch() {
             return Touch;
         };
     };
@@ -1211,20 +1264,20 @@ var OJSO = function () {
     /**
      * @returns {Event}
      */
-    _this.getEvent = function () {
+    _this.getEvent = function getEvent() {
         return Event;
     };
     /**
      * @todo window and document
      * @constructor
      */
-    var Css = function () {
+    var Css = function Css() {
         /* keyword this in this class context */
         var _this = this;
         /**
          * @constructor
          */
-        var Identifier = function () {
+        var Identifier = function Identifier() {
             /* keyword this in this class context */
             var _this = this;
             /**
@@ -1247,28 +1300,28 @@ var OJSO = function () {
         /**
          * @returns {Identifier}
          */
-        _this.getIdentifier = function () {
+        _this.getIdentifier = function getIdentifier() {
             return Identifier;
         };
         /**
          * @param {string} selector
          * @returns {string}
          */
-        _this.getClassSelector = function (selector) {
+        _this.getClassSelector = function getClassSelector(selector) {
             return _this.getSelector(_this.Identifier.class, selector);
         };
         /**
          * @param {string} selector
          * @returns {string}
          */
-        _this.getIdSelector = function (selector) {
+        _this.getIdSelector = function getIdSelector(selector) {
             return _this.getSelector(_this.Identifier.id, selector);
         };
         /**
          * @param {string} selector
          * @returns {string}
          */
-        _this.getTagSelector = function (selector) {
+        _this.getTagSelector = function getTagSelector(selector) {
             return _this.getSelector(_this.Identifier.tag, selector);
         };
         /**
@@ -1276,7 +1329,7 @@ var OJSO = function () {
          * @param {string} attributeValue
          * @returns {string}
          */
-        _this.getAttributeSelector = function (attributeName, attributeValue) {
+        _this.getAttributeSelector = function getAttributeSelector(attributeName, attributeValue) {
             return '[' + attributeName + '="' + attributeValue + '"]';
         };
         /**
@@ -1284,13 +1337,15 @@ var OJSO = function () {
          * @param {string} selector
          * @returns {string}
          */
-        _this.getSelector = function (identifier, selector) {
+        _this.getSelector = function getSelector(identifier, selector) {
             return identifier + selector;
         };
         /**
+         * @todo all tags
+         * @todo html class
          * @constructor
          */
-        var Tag = function () {
+        var Tag = function Tag() {
             /* keyword this in this class context */
             var _this = this;
             /**
@@ -1300,11 +1355,31 @@ var OJSO = function () {
             /**
              * @type {string}
              */
+            _this.anchor = _this.a;
+            /**
+             * @type {string}
+             */
             _this.div = 'div';
             /**
              * @type {string}
              */
+            _this.division = _this.div;
+            /**
+             * @type {HTMLDocument}
+             */
+            _this.document = document;
+            /**
+             * @type {string}
+             */
             _this.p = 'p';
+            /**
+             * @type {string}
+             */
+            _this.paragraph = _this.p;
+            /**
+             * @type {string}
+             */
+            // _this.row;
             /**
              * @type {string}
              */
@@ -1320,7 +1395,19 @@ var OJSO = function () {
             /**
              * @type {string}
              */
+            _this.cell = _this.td;
+            /**
+             * @type {string}
+             */
             _this.tr = 'tr';
+            /**
+             * @type {string}
+             */
+            _this.row = _this.tr;
+            /**
+             * @type {Window}
+             */
+            _this.window = window;
         };
         /**
          * singleton
@@ -1330,7 +1417,7 @@ var OJSO = function () {
         /**
          * @returns {Tag}
          */
-        _this.getTag = function () {
+        _this.getTag = function getTag() {
             return Tag;
         };
     };
@@ -1342,14 +1429,18 @@ var OJSO = function () {
     /**
      * @returns {Css}
      */
-    _this.getCssSelector = function () {
+    _this.getCss = function getCss() {
         return Css;
     };
+    /**
+     * @todo attributes
+     */
     /**
      * @type {DOMHandler&Css}
      * @constructor
      */
     /**
+     *
      * @constructor
      */
     var DOMHandler = function DOMHandler() {
@@ -1383,26 +1474,187 @@ var OJSO = function () {
      */
     _this.DOMHandler = new DOMHandler();
     /**
-     * @todo entire location
+     * @returns {DOMHandler}
+     */
+    _this.getDOMHandler = function getDOMHandler() {
+        return DOMHandler;
+    };
+    /**
      * @constructor
      */
     var Location = function Location() {
         /* keyword this in this class context */
         var _this = this;
-        _this.getHash = function () {
+        /**
+         * Sets or returns the anchor part (#) of a URL
+         *
+         * @returns {string}
+         */
+        _this.getHash = function getHash() {
             return location.hash;
         };
-        _this.setHash = function () {
-            return location.hash;
-        };
-        _this.hash = function (hash) {
-            if (_this.isUndefined(hash)) {
-                return location.hash;
-            }
+        /**
+         * Sets or returns the anchor part (#) of a URL
+         *
+         * @param {string} hash
+         */
+        _this.setHash = function setHash(hash) {
             location.hash = hash;
         };
-        _this.reload = function () {
-            location.reload();
+        /**
+         * Sets or returns the hostname and port number of a URL
+         *
+         * @returns {string}
+         */
+        _this.getHost = function getHost() {
+            return location.host;
+        };
+        /**
+         * Sets or returns the hostname and port number of a URL
+         *
+         * @param {string} host
+         */
+        _this.setHost = function setHost(host) {
+            location.host = host;
+        };
+        /**
+         * Sets or returns the hostname of a URL
+         *
+         * @returns {string}
+         */
+        _this.getHostname = function getHostname() {
+            return location.hostname;
+        };
+        /**
+         * Sets or returns the hostname of a URL
+         *
+         * @param {string} hostname
+         */
+        _this.setHostname = function setHostname(hostname) {
+            location.hostname = hostname;
+        };
+        /**
+         * Sets or returns the entire URL
+         *
+         * @returns {string}
+         */
+        _this.getHref = function getHref() {
+            return location.href;
+        };
+        /**
+         * Sets or returns the entire URL
+         *
+         * @param {string} href
+         */
+        _this.setHref = function setHref(href) {
+            location.href = href;
+        };
+        /**
+         * Returns the protocol, hostname and port number of a URL
+         *
+         * @returns {string}
+         */
+        _this.getOrigin = function getOrigin() {
+            return location.origin;
+        };
+        /**
+         * Returns the protocol, hostname and port number of a URL
+         *
+         * @param {string} origin
+         */
+        _this.setOrigin = function setOrigin(origin) {
+            location.origin = origin;
+        };
+        /**
+         * Sets or returns the path name of a URL
+         *
+         * @returns {string}
+         */
+        _this.getPathname = function getPathname() {
+            return location.pathname;
+        };
+        /**
+         * Sets or returns the path name of a URL
+         *
+         * @param {string} pathname
+         */
+        _this.setPathname = function setPathname(pathname) {
+            location.pathname = pathname;
+        };
+        /**
+         * Sets or returns the port number of a URL
+         *
+         * @returns {string}
+         */
+        _this.getPort = function getPort() {
+            return location.port;
+        };
+        /**
+         * Sets or returns the port number of a URL
+         *
+         * @param {string} port
+         */
+        _this.setPort = function setPort(port) {
+            location.port = port;
+        };
+        /**
+         * Sets or returns the protocol of a URL
+         *
+         * @returns {string}
+         */
+        _this.getProtocol = function getProtocol() {
+            return location.protocol;
+        };
+        /**
+         * Sets or returns the protocol of a URL
+         *
+         * @param {string} protocol
+         */
+        _this.setProtocol = function setProtocol(protocol) {
+            location.protocol = protocol;
+        };
+        /**
+         * Sets or returns the query string part of a URL
+         *
+         * @returns {string}
+         */
+        _this.getSearch = function getSearch() {
+            return location.search;
+        };
+        /**
+         * Sets or returns the query string part of a URL
+         *
+         * @param {string} search
+         */
+        _this.setSearch = function setSearch(search) {
+            location.search = search;
+        };
+        /**
+         * Loads a new document
+         *
+         * @param {string} url
+         */
+        _this.assign = function assign(url) {
+            location.assign(url);
+        };
+        /**
+         * Reloads the current document
+         *
+         * false - Default. Reloads the current page from the cache.
+         * true  - Reloads the current page from the server
+         *
+         * @param {boolean} forceGet
+         */
+        _this.reload = function reload(forceGet) {
+            location.reload(forceGet);
+        };
+        /**
+         * Replaces the current document with a new one
+         *
+         * @param {string} url
+         */
+        _this.replace = function replace(url) {
+            location.replace(url);
         };
     };
     /**
@@ -1413,5 +1665,20 @@ var OJSO = function () {
      * @type {Location}
      */
     _this.Location = new Location();
+    /**
+     * @returns {Location}
+     */
+    _this.getLocation = function getLocation() {
+        return Location;
+    };
+    /**
+     * @todo window
+     * @todo navigator
+     * @todo screen
+     * @todo history
+     * @todo console
+     * @todo storage
+     * @todo cookie
+     */
 };
 OJSO = new OJSO();
