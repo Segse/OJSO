@@ -16,8 +16,20 @@
  * @todo css identifier getCreate css class
  * @todo location
  * @todo no shortcut vars params methods
+ * @todo window and document
+ * @todo attributes
+ * @todo window
+ * @todo navigator
+ * @todo screen
+ * @todo history
+ * @todo console
+ * @todo storage
+ * @todo cookie
+ * @todo jsdoc
+ *
+ * @constructor
  */
-var OJSO = function OJSO() {
+var OJSO = new function OJSO() {
     'use strict';
     /* keyword this in this class context */
     var _this = this;
@@ -26,6 +38,264 @@ var OJSO = function OJSO() {
      * @private
      */
     var _thisNamespace = _this;
+    /**
+     * @constructor
+     */
+    _this.JSDoc = function JSDoc() {
+        /* keyword this in this class context */
+        var _this = this;
+        /**
+         * Description text...
+         *
+         * @type {undefined}
+         */
+        _this.description = undefined;
+        /**
+         * @type {*}
+         */
+        _this.anyType1 = undefined;
+        /**
+         * @type {boolean}
+         */
+        _this.boolean1 = false;
+        /**
+         * @type {boolean|number}
+         */
+        _this.booleanOrNumber1 = false;
+        /**
+         * @type {number}
+         */
+        _this.number1 = 0;
+        /**
+         * @type {?number}
+         */
+        _this.numberOrNull1 = 0;
+        /**
+         * @type {!number}
+         */
+        _this.numberButNotNull1 = 0;
+        /**
+         * @type {string}
+         */
+        _this.string1 = '';
+        /** */
+        _this.function1 = function function1() {
+        };
+        /**
+         * @param {boolean} param1
+         * @param {boolean} param2
+         */
+        _this.function2 = function function2(param1, param2) {
+        };
+        /**
+         * This function accepts a variable number of numeric parameters.
+         *
+         * @param {...boolean} param
+         */
+        _this.function3 = function function3(param) {
+        };
+        /**
+         * @param {boolean} [param]
+         */
+        _this.function4 = function function4(param) {
+        };
+        /**
+         * @param {boolean=} param
+         */
+        _this.function5 = function function5(param) {
+        };
+        /**
+         * @param {boolean} [param=false]
+         */
+        _this.function6 = function function6(param) {
+        };
+        /**
+         * @type {Array}
+         */
+        _this.array1 = [];
+        /**
+         * @type {Array.<MyClass2>}
+         */
+        _this.arrayOfMyClass2_1 = [_this.MyClass2, _this.MyClass2];
+        /**
+         * @type {MyClass2[]}
+         */
+        _this.arrayOfMyClass2_2 = [_this.MyClass2, _this.MyClass2];
+        /**
+         * @type {{}}
+         */
+        _this.Object1 = {};
+        /**
+         * @type {Object}
+         */
+        _this.Object2 = {};
+        /**
+         * @type {Object.<string, number>}
+         */
+        _this.Object3 = {
+            'a': 0,
+            'b': 1
+        };
+        /**
+         * @type {{a: number, b: number}}
+         */
+        _this.Object4 = {
+            'a': 0,
+            'b': 1
+        };
+        /**
+         * @type {Namespace1}
+         */
+        var Namespace1 = {};
+        /**
+         * @type {Namespace1.Class1}
+         * @constructor
+         */
+        Namespace1.Class1 = function Class1() {
+        };
+        /**
+         * @type {Namespace1.Class1}
+         */
+        _this.Class2 = Namespace1.Class1;
+        /**
+         * @param {boolean} param1
+         */
+        var callback1 = function callback1(param1) {
+        };
+        /**
+         * @callback callback1
+         * @param {boolean} param1
+         */
+        /**
+         * @type {callback1}
+         */
+        _this.callback2 = callback1;
+        /**
+         * @type {{a: boolean, b: number, c: string, d: d, e: Array, f: {}}}
+         */
+        var TypeDef1 = {
+            a: false,
+            b: 0,
+            c: '',
+            d: function d() {
+            },
+            e: [],
+            f: {}
+        };
+        /**
+         * @typedef TypeDef2
+         * @type {Object}
+         * @property {boolean} a
+         * @property {number} b
+         * @property {string} c
+         * @property {function} d
+         * @property {Array} e
+         * @property {Object} f
+         */
+        _this.TypeDef2 = TypeDef1;
+        /**
+         * @typedef {Object} TypeDef3
+         * @property {boolean} a
+         * @property {number} b
+         * @property {string} c
+         * @property {function} d
+         * @property {Array} e
+         * @property {Object} f
+         */
+        _this.TypeDef3 = TypeDef1;
+        /**
+         * @typedef {TypeDef1} TypeDef4
+         * @property {boolean} a
+         * @property {number} b
+         * @property {string} c
+         * @property {function} d
+         * @property {Array} e
+         * @property {Object} f
+         */
+        _this.TypeDef4 = TypeDef1;
+        /**
+         * @typedef TypeDef5
+         * @property {boolean} a
+         * @property {number} b
+         * @property {string} c
+         * @property {function} d
+         * @property {Array} e
+         * @property {Object} f
+         */
+        _this.TypeDef5 = TypeDef1;
+        /**
+         * @typedef {boolean} Special
+         */
+        /**
+         * @param {Special} param
+         */
+        _this.TypeDef6 = function TypeDef6(param) {
+        };
+        /**
+         * @typedef {TypeDef1} TypeDef7~Typedef7param
+         * @property {boolean} a
+         * @property {number} b
+         * @property {string} c
+         */
+        /**
+         * @param {TypeDef7~Typedef7param} typeDef7param
+         */
+        _this.TypeDef7 = function TypeDef7(typeDef7param) {
+        };
+        /**
+         * Link inline {@link http://usejsdoc.org/tags-inline-link.html} description
+         *
+         * @type {undefined}
+         */
+        _this.link1 = undefined;
+        /**
+         * @version 1.2.3
+         * @type {undefined}
+         */
+        _this.version1 = undefined;
+        /**
+         * @todo I am todo360, at your service.
+         */
+        _this.todo1 = function todo1() {
+        };
+        /**
+         * @throws {TestException} description
+         */
+        _this.throw1 = function throw1() {
+            throw 'TestException';
+        };
+        /**
+         * @since 1234.12.12
+         */
+        _this.since = function since() {
+        };
+        /**
+         * @see link1
+         * @see {@link link1} description
+         * @see {@link http://usejsdoc.org/tags-inline-link.html} description
+         */
+        _this.see = function see() {
+        };
+        /**
+         * @returns {boolean} always false
+         */
+        _this.return1 = function return1() {
+            return false;
+        };
+        /**
+         * @param {boolean|number|Namespace1} x
+         * @returns {boolean|number|Namespace1} depends on input
+         */
+        _this.return2 = function return1(x) {
+            return x;
+        };
+        // /**
+        //  * @const
+        //  */
+        // /**
+        //  * @const {number}
+        //  */
+    };
     /**
      * @constructor
      */
@@ -1268,7 +1538,6 @@ var OJSO = function OJSO() {
         return Event;
     };
     /**
-     * @todo window and document
      * @constructor
      */
     var Css = function Css() {
@@ -1433,14 +1702,7 @@ var OJSO = function OJSO() {
         return Css;
     };
     /**
-     * @todo attributes
-     */
-    /**
      * @type {DOMHandler&Css}
-     * @constructor
-     */
-    /**
-     *
      * @constructor
      */
     var DOMHandler = function DOMHandler() {
@@ -1468,8 +1730,6 @@ var OJSO = function OJSO() {
     };
     /**
      * @type {DOMHandler&Event}
-     */
-    /**
      * @type {DOMHandler}
      */
     _this.DOMHandler = new DOMHandler();
@@ -1671,14 +1931,4 @@ var OJSO = function OJSO() {
     _this.getLocation = function getLocation() {
         return Location;
     };
-    /**
-     * @todo window
-     * @todo navigator
-     * @todo screen
-     * @todo history
-     * @todo console
-     * @todo storage
-     * @todo cookie
-     */
 };
-OJSO = new OJSO();
